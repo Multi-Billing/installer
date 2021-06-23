@@ -1,0 +1,22 @@
+---
+- name: "copy clear dump"
+  copy:
+    src: database_r552.sql
+    dest: "{{ billing.dirs.tmp }}/database.sql"
+    mode: 0644
+  when: mysql.backup_file == ''
+
+- name: "check use_backup_file exists"
+  stat:
+    path: "{{ mysql.backup_file }}"
+  register: mysql_backup_file
+  when: mysql.backup_file != ''
+
+- name: "copy use_backup_file"
+  copy:
+    src: "{{ mysql.backup_file }}"
+    dest: "{{ billing.dirs.tmp }}/database.sql"
+    mode: 0644
+  when:
+    - mysql.backup_file != ''
+    - mysql_backup_file.stat.exists == true

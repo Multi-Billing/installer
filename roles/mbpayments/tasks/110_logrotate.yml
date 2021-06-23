@@ -1,0 +1,8 @@
+---
+- name: "add {{ mbpayments.dirs.module }} logrotate file"
+  template:
+    src: "{{ mbpayments.dirs.module }}.logrotate"
+    dest: "{{ OS.logrotate }}/{{ mbpayments.dirs.module }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx

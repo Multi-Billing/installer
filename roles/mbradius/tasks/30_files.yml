@@ -1,0 +1,12 @@
+---
+- name: "copy {{ OS.radius.version }}x files"
+  copy:
+    src: "{{ OS.radius.version }}x.tar.gz"
+    dest: "{{ billing.dirs.tmp }}/raddb.tar.gz"
+    mode: 0644
+
+- name: "unpack files"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/raddb.tar.gz"
+    dest: "{{ OS.radius.dirs.conf }}"
+    mode: 0644

@@ -1,0 +1,52 @@
+mbadmin:
+  software:
+    database:
+      mysql_user: "mbadmin"
+      mysql_role: "role_mbadmin"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+    nginx:
+      subdomain:
+        # поддомен админки, если основной домен ispnet.demo
+        # то получится:
+        #   рабочая версия: admin.ispnet.demo
+        #   тестовая версия: test.admin.ispnet.demo
+        production: "admin"
+        testing: "test.admin"
+    fpm:
+      production:
+        pool_name: "mbadmin_production"
+        pool_file: "mbadmin_production.conf"
+        socket: "/var/run/php-fpm_mbadmin_production.sock"
+      testing:
+        pool_name: "mbadmin_testing"
+        pool_file: "mbadmin_testing.conf"
+        socket: "/var/run/php-fpm_mbadmin_testing.sock"
+  dirs:
+    module: "mbadmin"
+    chroot: "chroot"
+    www: "/var/www"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    archive_backend: "mbadmin.tar.gz"
+    archive_frontend: "mbfront.tar.gz"
+    update_backend: "mbadmin_backend_update.sh"
+    update_frontend: "mbadmin_frontend_update.sh"
+    testing_backend: "mbadmin_backend_testing.sh"
+    testing_frontend: "mbadmin_frontend_testing.sh"
+    config: "config.xml"
+    log_main: "mbadmin.log"
+    log_debug: "mbadmin.debug"
+    log_update: "update.log"
+  requirements:
+    ram: 1864
+    cores: 2

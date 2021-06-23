@@ -1,0 +1,77 @@
+---
+- name: "copy config"
+  copy:
+    src: "{{ mbadmin.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/config/{{ mbadmin.files.config }}"
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+
+- name: "replace timezone"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/config/{{ mbadmin.files.config }}"
+    regexp: "{timezone}"
+    replace: "{{ timezone.stdout }}"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+
+- name: "replace main log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/config/{{ mbadmin.files.config }}"
+    regexp: "{log_main}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.files.log_main }}"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+
+- name: "replace debug log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/config/{{ mbadmin.files.config }}"
+    regexp: "{log_debug}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.files.log_debug }}"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/config/{{ mbadmin.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbadmin.software.database.mysql_pass }}"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+  when: mbadmin.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace mysql username"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/config/{{ mbadmin.files.config }}"
+    regexp: "{username}"
+    replace: "{{ mbadmin.software.database.mysql_user }}"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/config/{{ mbadmin.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.database }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/config/{{ mbadmin.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.testing }}"
+
+- name: "replace mysql host"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/config/{{ mbadmin.files.config }}"
+    regexp: "{server_host}"
+    replace: "{{ billing.mysql_server }}"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"

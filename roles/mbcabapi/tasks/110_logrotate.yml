@@ -1,0 +1,8 @@
+---
+- name: "add {{ mbcabapi.dirs.module }} logrotate file"
+  template:
+    src: "{{ mbcabapi.dirs.module }}.logrotate"
+    dest: "{{ OS.logrotate }}/{{ mbcabapi.dirs.module }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx

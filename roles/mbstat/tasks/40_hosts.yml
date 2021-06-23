@@ -1,0 +1,8 @@
+---
+- name: "add records"
+  blockinfile:
+    path: "{{ OS.hosts }}"
+    block: |
+      127.0.0.1 {{ mbstat.software.nginx.subdomain.production }}.{{ billing.domain }}
+      127.0.0.1 {{ mbstat.software.nginx.subdomain.testing }}.{{ billing.domain }}
+    marker: "# {mark} mbstat DEFAULT RECORDS"

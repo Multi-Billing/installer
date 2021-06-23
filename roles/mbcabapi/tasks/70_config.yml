@@ -1,0 +1,77 @@
+---
+- name: "copy config"
+  copy:
+    src: "{{ mbcabapi.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/config/{{ mbcabapi.files.config }}"
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "replace timezone"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{timezone}"
+    replace: "{{ timezone.stdout }}"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "replace main log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{log_main}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.files.log_main }}"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "replace debug log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{log_debug}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.files.log_debug }}"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbcabapi.software.database.mysql_pass }}"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+  when: mbcabapi.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace mysql username"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{username}"
+    replace: "{{ mbcabapi.software.database.mysql_user }}"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.database }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.testing }}"
+
+- name: "replace mysql host"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/config/{{ mbcabapi.files.config }}"
+    regexp: "{server_host}"
+    replace: "{{ billing.mysql_server }}"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"

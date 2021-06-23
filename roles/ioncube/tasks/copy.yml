@@ -1,0 +1,9 @@
+---
+- name: "copy files"
+  copy:
+    src: "{{ item }}"
+    dest: "{{ OS.ioncube.dirs.data }}/{{ item }}"
+    mode: 0644
+  with_items:
+    - "{{ OS.ioncube.files.so }}"
+    - "{{ OS.ioncube.files.ts }}"

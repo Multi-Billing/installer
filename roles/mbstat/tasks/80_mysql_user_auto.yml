@@ -1,0 +1,92 @@
+---
+# создание переменных для облегчения переноса на другие модули
+- name: "register variables"
+  set_fact:
+    module_name="{{ mbstat.dirs.module }}"
+    config_path_production="{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.production }}/{{ mbstat.dirs.config }}/{{ mbstat.files.config }}"
+    config_path_testing="{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.testing }}/{{ mbstat.dirs.config }}/{{ mbstat.files.config }}"
+    configuration="{{ mbstat.software.database }}"
+
+# создание переменных для удобства
+- name: "register mysql_user"
+  set_fact: mysql_user="{{ configuration.mysql_user }}"
+
+- name: "register mysql_role"
+  set_fact: mysql_role="{{ configuration.mysql_role }}"
+
+- name: "register custom_pass"
+  set_fact: custom_pass="{{ configuration.mysql_pass }}"
+
+- name: "register client_ip"
+  set_fact: client_ip="{{ configuration.client_ip }}"
+
+- name: "register client_ip"
+  set_fact: client_ip="{{ ansible_default_ipv4.address }}"
+  when: configuration.use_ansible_default_ipv4
+
+- name: "register client_ip"
+  set_fact: client_ip="127.0.0.1"
+  when: billing.mysql_server == "127.0.0.1" or billing.mysql_server == "localhost"
+
+# проверяем был ли создан пользователь ранее
+- name: "check if username is already exists"
+  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -Ne "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE User = '{{ mysql_user }}' and Host = '{{ client_ip }}');"
+  register: user_exists
+
+# проверяем был ли создан пароль ранее
+- name: "check if password already generated"
+  stat:
+    path: "{{ billing.dirs.tmp }}/{{ module_name }}_password"
+  register: mysql_pass_generated
+
+# генерируем пароль юзера если он пустой
+- name: "generate password"
+  shell: "bash roles/generatepasswd.sh > {{ billing.dirs.tmp }}/{{ module_name }}_password"
+  when: mysql_pass_generated.stat.exists == False
+
+# копируем сгенерированный пароль
+- name: "copy password into variable"
+  set_fact:
+    mysql_pass: "{{ lookup('file', '{{ billing.dirs.tmp }}/{{ module_name }}_password') }}"
+  when: custom_pass == ""
+
+# копируем введенный пароль юзера
+- name: "copy {{ mysql_user }} password into variable"
+  set_fact:
+    mysql_pass:  "{{ custom_pass }}"
+  when: custom_pass != ""
+
+# создаем пользователя
+- name: "create {{ module_name }} user"
+  block:
+    - name: "run queue"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED WITH mysql_native_password BY '{{ mysql_pass }}' REQUIRE NONE;"
+
+    - name: "apply rights"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+
+    - name: "apply default role"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "SET DEFAULT ROLE '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+
+    - name: "mark completed"
+      file:
+        path: "{{ billing.dirs.tmp }}/{{ module_name }}_created"
+        state: touch
+  when: user_exists.stdout == "0"
+
+# заменяем пароль в конфиге
+- name: "replace mysql password"
+  replace:
+    path: "{{ config_path_production }}"
+    regexp: "{password}"
+    replace: "{{ mysql_pass }}"
+  no_log: true
+  when: mysql_pass is defined
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ config_path_testing }}"
+    regexp: "{password}"
+    replace: "{{ mysql_pass }}"
+  no_log: true
+  when: mysql_pass is defined

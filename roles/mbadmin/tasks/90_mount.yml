@@ -1,0 +1,35 @@
+---
+- name: "register {{ mbadmin.dirs.production }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.chroot }}/{{ mbadmin.dirs.production }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/public -> {{ chroot_dir }}{{ mbadmin.dirs.www }}/{{ mbadmin.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/public {{ chroot_dir }}{{ mbadmin.dirs.www }}/{{ mbadmin.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbadmin.dirs.module }} {{ mbadmin.dirs.production }}"
+
+- name: "register {{ mbadmin.dirs.testing }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.chroot }}/{{ mbadmin.dirs.testing }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/public -> {{ chroot_dir }}{{ mbadmin.dirs.www }}/{{ mbadmin.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/public {{ chroot_dir }}{{ mbadmin.dirs.www }}/{{ mbadmin.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbadmin.dirs.module }} {{ mbadmin.dirs.testing }}"
+
+- name: "re-mount"
+  command: "mount -a"
+  args:
+    warn: no

@@ -1,0 +1,77 @@
+---
+- name: "copy {{ mbadmin.dirs.module }} backend archive"
+  copy:
+    src: "{{ mbadmin.files.archive_backend }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbadmin.files.archive_backend }}"
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbadmin.dirs.module }} backend archive"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbadmin.files.archive_backend }}"
+    dest: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/public/"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+
+- name: "copy {{ mbadmin.dirs.module }} frontend archive"
+  copy:
+    src: "{{ mbadmin.files.archive_frontend }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbadmin.files.archive_frontend }}"
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbadmin.dirs.module }} frontend archive"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbadmin.files.archive_frontend }}"
+    dest: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item }}/public/"
+  with_items:
+    - "{{ mbadmin.dirs.production }}"
+    - "{{ mbadmin.dirs.testing }}"
+
+- name: "create main log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.dirs.module }}/{{ mbadmin.files.log_main }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create debug log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.dirs.module }}/{{ mbadmin.files.log_debug }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create update log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.dirs.module }}/{{ mbadmin.files.log_update }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "add updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item.path }}/{{ mbadmin.dirs.updates }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbadmin.files.update_backend }}", path: "{{ mbadmin.dirs.production }}" }
+    - { file: "{{ mbadmin.files.update_frontend }}", path: "{{ mbadmin.dirs.production }}" }
+    - { file: "{{ mbadmin.files.testing_backend }}", path: "{{ mbadmin.dirs.testing }}" }
+    - { file: "{{ mbadmin.files.testing_frontend }}", path: "{{ mbadmin.dirs.testing }}" }
+
+- name: "create mrtg files"
+  file:
+    path: "{{ OS.mrtg.dirs.conf }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rwx,g=rw,o=rw
+  with_items:
+    - "mrtg.cfg"
+    - "{{ OS.mrtg.files.users }}"
+    - "{{ OS.mrtg.files.tarif }}"

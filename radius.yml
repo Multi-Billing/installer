@@ -1,0 +1,33 @@
+---
+- name: "RADIUS][Install PlayBook"
+  hosts: local
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  pre_tasks:
+    - name: "read billing config"
+      include_vars: config/billing.yaml
+
+    - name: "read database config"
+      include_vars: config/database.yaml
+
+    - name: "read mbradius config"
+      include_vars: config/modules/mbradius.yaml
+
+    - name: "read OS config"
+      include_vars: "config/os/{{ ansible_os_family | lower }}_{{ ansible_distribution_major_version }}.yaml"
+
+    - name: "create {{ billing.dirs.tmp }}"
+      file:
+        path: "{{ billing.dirs.tmp }}"
+        owner: root
+        group: root
+        mode: 0755
+        state: directory
+  roles:
+   - requirements
+   - selinux
+   - packages
+   - settings
+   - database_connect
+   - mbradius
+   - final

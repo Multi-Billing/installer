@@ -1,0 +1,122 @@
+OS:
+  database:
+    percona:
+      name: mysql
+      version: 8.0
+      alias: mysql.service
+      systemd: /etc/systemd/system/mysql.service
+      socket: /var/lib/mysql/mysql.sock
+      dirs:
+        conf: /etc
+        logs: /var/log/mysql
+        data: /var/lib/mysql
+        run: /var/run/mysqld
+      firstrun_pwd: mysql.err
+
+  radius:
+    name: radiusd
+    version: 3
+    alias: radiusd.service
+    systemd: /usr/lib/systemd/system
+    dirs:
+      conf: /etc/raddb
+      logs: /var/log/radius
+      perl: /usr/lib64/perl5
+      attr: /usr/share/freeradius
+    files:
+      conf: radiusd.conf
+      sql: sql.conf
+
+  php:
+    dirs:
+      conf: /etc
+      mods: /etc/php.d
+    files:
+      ini: php.ini
+      cli: php.ini
+
+  fpm:
+    name: php-fpm
+    files:
+      ini: php.ini
+      conf: php-fpm.conf
+      pool: www.conf
+      socket: /var/run/php-fpm.sock
+    dirs:
+      conf: /etc
+      pool: /etc/php-fpm.d
+      logs: /var/log/php-fpm
+      save_path: /var/lib/php/session
+    config:
+      fpm:
+        demonized: "yes"
+      pool:
+        name: www
+        user: apache
+        group: apache
+        listen:
+          user: nginx
+          group: nginx
+
+  nginx:
+    name: nginx
+    owner: nginx
+    dirs:
+      conf: /etc/nginx
+      ssl: /etc/nginx/conf.d/ssl
+      logs: /var/log/nginx
+    files:
+      ssl_key: ca.key
+      ssl_cert: ca.crt
+      config: nginx.conf
+      fastcgi: fastcgi
+
+  dhcp:
+    package: dhcp-server
+    name: dhcpd
+    files:
+      conf: dhcpd.conf
+    dirs:
+      conf: /etc/dhcp
+
+  dns:
+    package: unbound
+    name: unbound
+    files:
+      conf: unbound.conf
+    dirs:
+      conf: /etc/unbound
+
+  ioncube:
+    dirs:
+      data: /usr/local/ioncube
+    files:
+      so: ioncube_loader_lin_7.2.so
+      ts: ioncube_loader_lin_7.2_ts.so
+
+  mrtg:
+    package: mrtg
+    dirs:
+      conf: /etc/mrtg
+    files:
+      users: mrtg_users.conf
+      tarif: mrtg_tarif.conf
+
+  cron:
+    name: crond
+    dirs:
+      custom: /etc/cron.d
+
+  selinux: 0
+  hosts: /etc/hosts
+  sysctl: /etc/sysctl.conf
+  sudo: /etc/sudoers.d
+  logrotate: /etc/logrotate.d/
+  service: /sbin/service
+  systemctl: /bin/systemctl
+  systemd: /usr/lib/systemd/system
+  radclient: /bin/radclient
+  echo: /bin/echo
+  snmpwalk: /bin/snmpwalk
+  snmpget:  /bin/snmpget
+  libs: /usr/lib64

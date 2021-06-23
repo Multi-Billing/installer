@@ -1,0 +1,22 @@
+---
+- name: "create {{ mbadmin.dirs.module }} directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "/etc/mrtg"
+    - "/usr/share/freeradius"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbadmin.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/config"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/public"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/{{ mbadmin.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/config"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/public"
+    - "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/{{ mbadmin.dirs.updates }}"

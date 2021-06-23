@@ -1,0 +1,12 @@
+---
+- name: install
+  package:
+    name:
+       - freeradius
+       - freeradius-mysql
+       - freeradius-utils
+       - freeradius-common
+       - freeradius-iodbc
+       - libfreeradius3
+       - libfreeradius-dev
+    state: present

@@ -1,0 +1,29 @@
+---
+- name: "add hard limit 35000 for *"
+  pam_limits:
+    domain: '*'
+    limit_type: hard
+    limit_item: nofile
+    value: "35000"
+
+- name: "add soft limit 35000 for *"
+  pam_limits:
+    domain: '*'
+    limit_type: soft
+    limit_item: nofile
+    value: "35000"
+
+- name: "add hard limit 35000 for root"
+  pam_limits:
+    domain: root
+    limit_type: hard
+    limit_item: nofile
+    value: "35000"
+
+- name: "add soft limit 35000 for root"
+  pam_limits:
+    domain: root
+    limit_type: soft
+    limit_item: nofile
+    value: "35000"
+

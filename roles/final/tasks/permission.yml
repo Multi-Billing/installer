@@ -1,0 +1,8 @@
+---
+- name: "make root read-only"
+  file:
+    path: "{{ billing.dirs.tmp }}/"
+    owner: root
+    group: root
+    recurse: yes
+    mode: 0700

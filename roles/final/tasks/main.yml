@@ -1,0 +1,20 @@
+---
+- include_tasks: permission.yml
+- include_tasks: database.yml
+  when: hostvars[inventory_hostname].root_passwd is defined
+- include_tasks: radius.yml
+  when: mbradius is defined
+- include_tasks: mbkernel.yml
+  when: mbkernel is defined
+- include_tasks: mbdbupdate.yml
+  when: mbdbupdate is defined
+- include_tasks: mbadmin.yml
+  when: mbadmin is defined
+- include_tasks: mbstat.yml
+  when: mbstat is defined
+- include_tasks: mbcabapi.yml
+  when: mbcabapi is defined
+- include_tasks: mbpayments.yml
+  when: mbpayments is defined
+- include_tasks: mbqueue.yml
+  when: mbqueue is defined

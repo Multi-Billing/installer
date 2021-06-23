@@ -1,0 +1,19 @@
+[Unit]
+Description=FreeRADIUS high performance RADIUS server.
+After=syslog.target network-online.target ipa.service dirsrv.target krb5kdc.service mysql.service mariadb.service postgresql.service
+
+[Service]
+Type=forking
+RuntimeDirectory={{ OS.radius.name }}
+PIDFile=/var/run/radiusd/radiusd.pid
+ExecStartPre=/usr/sbin/radiusd -C
+ExecStart=/usr/sbin/radiusd -d /etc/raddb
+ExecReload=/usr/sbin/radiusd -C
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -9 $MAINPID
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

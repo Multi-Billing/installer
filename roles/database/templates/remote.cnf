@@ -1,0 +1,4 @@
+[client]
+host="{{ billing.mysql_server }}"
+user="{{ mysql.login }}"
+password="{{ mysql.pass }}"

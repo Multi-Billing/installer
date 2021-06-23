@@ -1,0 +1,11 @@
+linelog {
+ filename = syslog
+ format = ""
+ reference = "%{%{reply:DHCP-Message-Type}:-%{request:DHCP-Message-Type}}"
+ DHCP-Discover = "%{DHCP-Transaction-Id} DISCOVER: [%{DHCP-Client-Hardware-Address}] via (%{DHCP-Gateway-IP-Address}) %{DHCP-Hostname}"
+ DHCP-Offer = "%{DHCP-Transaction-Id} OFFER: %{reply:DHCP-Your-IP-Address} to [%{DHCP-Client-Hardware-Address}] ..."
+ DHCP-Request = "%{DHCP-Transaction-Id} REQUEST: [%{DHCP-Client-Hardware-Address}] via (%{DHCP-Gateway-IP-Address}) ..."
+ DHCP-Ack = "%{DHCP-Transaction-Id} ACK: %{reply:DHCP-Your-IP-Address} to [%{DHCP-Client-Hardware-Address}] ..."
+ DHCP-NAK = "%{DHCP-Transaction-Id} NAK: [%{DHCP-Client-Hardware-Address}] for %{request:DHCP-Client-IP-Address}; ..."
+ 0 = "%{DHCP-Transaction-Id} %{request:DHCP-Message-Type} DROPPED: ..."
+}

@@ -1,0 +1,23 @@
+---
+- include_tasks: "00_install_{{ ansible_os_family | lower }}{{ ansible_distribution_major_version }}.yml"
+- include_tasks: 10_clear.yml
+- include_tasks: 20_dirs.yml
+- include_tasks: 30_files.yml
+- include_tasks: 40_serialize.yml
+- include_tasks: 50_attributes.yml
+- include_tasks: 60_replace_values.yml
+- include_tasks: 61_dhcp_module.yml
+
+- name: "check {{ billing.mysql_connect }} exists"
+  stat:
+    path: "{{ billing.mysql_connect }}"
+  register: mysql_connect
+
+- include_tasks: 70_mysql_user_auto.yml
+  when: mysql_connect.stat.exists == True
+
+- include_tasks: 71_mysql_user_manual.yml
+  when: mysql_connect.stat.exists == False
+
+- include_tasks: 80_systemd.yml
+  when: ansible_os_family | lower == "redhat"

@@ -1,0 +1,16 @@
+<config>
+    <parameters>
+        <mysql>
+            <host>{server_host}</host>
+            <username>{username}</username>
+            <password>{password}</password>
+            <dbname>{database}</dbname>
+        </mysql>
+        <siteName>Multi-BiLLing</siteName>
+        <timezone>{timezone}</timezone>
+        <partialUTF8>false</partialUTF8>
+        <debug>false</debug>
+        <error_log>{log_main}</error_log>
+        <debug_log>{log_debug}</debug_log>
+    </parameters>
+</config>

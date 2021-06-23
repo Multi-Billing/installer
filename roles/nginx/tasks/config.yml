@@ -1,0 +1,27 @@
+---
+- name: "check nginx.conf"
+  shell: "grep -c 'request_body' {{ OS.nginx.dirs.conf }}/nginx.conf || true"
+  register: nginx_config
+
+- name: "make simple nginx.conf"
+  template:
+    src: nginx.conf
+    dest: "{{ OS.nginx.dirs.conf }}/nginx.conf"
+    mode: 0644
+  when: nginx_config.stdout == "0"
+
+- name: "make fastcgi_params"
+  template:
+    src: fastcgi
+    dest: "{{ OS.nginx.dirs.conf }}/fastcgi_params"
+    mode: 0644
+
+- name: "remove default.conf"
+  file:
+    path: "{{ OS.nginx.dirs.conf }}/conf.d/default.conf"
+    state: absent
+
+- name: "remove php-fpm.conf"
+  file:
+    path: "{{ OS.nginx.dirs.conf }}/conf.d/php-fpm.conf"
+    state: absent

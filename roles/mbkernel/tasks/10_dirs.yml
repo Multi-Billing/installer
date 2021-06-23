@@ -1,0 +1,19 @@
+---
+- name: "create {{ mbkernel.dirs.module }} catalogs"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbkernel.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbkernel.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbkernel.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbkernel.dirs.module }}/{{ mbkernel.dirs.production }}"
+    - "{{ billing.dirs.home }}/{{ mbkernel.dirs.module }}/{{ mbkernel.dirs.production }}/{{ mbkernel.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbkernel.dirs.module }}/{{ mbkernel.dirs.production }}/{{ mbkernel.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbkernel.dirs.module }}/{{ mbkernel.dirs.testing }}"
+    - "{{ billing.dirs.home }}/{{ mbkernel.dirs.module }}/{{ mbkernel.dirs.testing }}/{{ mbkernel.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbkernel.dirs.module }}/{{ mbkernel.dirs.testing }}/{{ mbkernel.dirs.updates }}"

@@ -1,0 +1,49 @@
+---
+- name: "copy {{ mbcabapi.dirs.module }} backend archive"
+  copy:
+    src: "{{ mbcabapi.files.archive_backend }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbcabapi.files.archive_backend }}"
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbcabapi.dirs.module }} backend archive"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbcabapi.files.archive_backend }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/public/"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "create main log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.files.log_main }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create debug log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.files.log_debug }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create update log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.files.log_update }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "add updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item.path }}/{{ mbcabapi.dirs.updates }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbcabapi.files.update_backend }}", path: "{{ mbcabapi.dirs.production }}" }
+    - { file: "{{ mbcabapi.files.testing_backend }}", path: "{{ mbcabapi.dirs.testing }}" }

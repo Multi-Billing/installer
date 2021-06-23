@@ -1,0 +1,25 @@
+---
+- name: "check operation status"
+  stat:
+    path: "{{ billing.dirs.tmp }}/users_deleted"
+  register: users_deleted
+
+- name: "delete default users"
+  shell: "{{ item }}"
+  with_items:
+    - mysql --defaults-file="{{ billing.mysql_connect }}" -e "DELETE FROM mysql.user WHERE User='' AND Host='localhost'"
+    - mysql --defaults-file="{{ billing.mysql_connect }}" -e "DELETE FROM mysql.user WHERE User='' AND Host='{{ ansible_fqdn }}'"
+    - mysql --defaults-file="{{ billing.mysql_connect }}" -e "DELETE FROM mysql.user WHERE User='' AND Host='%'"
+    - mysql --defaults-file="{{ billing.mysql_connect }}" -e "DELETE FROM mysql.user WHERE User='root' AND Host='::1'"
+  no_log: true
+  when: users_deleted.stat.exists == False
+
+- name: "delete root fqdn user"
+  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "DELETE FROM mysql.user WHERE User='root' AND Host='{{ ansible_fqdn }}'"
+  no_log: true
+  when: ansible_fqdn != 'localhost' and users_deleted.stat.exists == False
+
+- name: "mark completed"
+  file: 
+    path: "{{ billing.dirs.tmp }}/users_deleted"
+    state: touch

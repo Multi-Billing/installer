@@ -1,0 +1,35 @@
+---
+- name: "register {{ mbcabapi.dirs.production }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.chroot }}/{{ mbcabapi.dirs.production }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/public -> {{ chroot_dir }}{{ mbcabapi.dirs.www }}/{{ mbcabapi.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/public {{ chroot_dir }}{{ mbcabapi.dirs.www }}/{{ mbcabapi.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbcabapi.dirs.module }} {{ mbcabapi.dirs.production }}"
+
+- name: "register {{ mbcabapi.dirs.testing }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.chroot }}/{{ mbcabapi.dirs.testing }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}/public -> {{ chroot_dir }}{{ mbcabapi.dirs.www }}/{{ mbcabapi.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}/public {{ chroot_dir }}{{ mbcabapi.dirs.www }}/{{ mbcabapi.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbcabapi.dirs.module }} {{ mbcabapi.dirs.testing }}"
+
+- name: "re-mount"
+  command: "mount -a"
+  args:
+    warn: no

@@ -1,0 +1,26 @@
+---
+- name: "Install Percona repositories"
+  apt:
+    deb: https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+
+- name: "update apt caches after repo is added"
+  apt: update_cache=true
+
+- name: "enable percona 8.0 release"
+  shell: percona-release setup ps80
+
+- name: "copy template"
+  template:
+    src: percona8.cnf
+    dest: "{{ OS.database.percona.dirs.conf }}/my.cnf"  
+    mode: u=rw,g=r,o=r
+
+- name: "install percona packages"
+  apt:
+    name:
+       - percona-server-server
+       - percona-server-client
+    state: present
+    update_cache: yes
+  environment:
+    DEBIAN_FRONTEND: noninteractive

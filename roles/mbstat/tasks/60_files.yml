@@ -1,0 +1,49 @@
+---
+- name: "copy {{ mbstat.dirs.module }} backend archive"
+  copy:
+    src: "{{ mbstat.files.archive_backend }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbstat.files.archive_backend }}"
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbstat.dirs.module }} backend archive"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbstat.files.archive_backend }}"
+    dest: "{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ item }}/public/"
+  with_items:
+    - "{{ mbstat.dirs.production }}"
+    - "{{ mbstat.dirs.testing }}"
+
+- name: "create main log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbstat.dirs.module }}/{{ mbstat.files.log_main }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create debug log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbstat.dirs.module }}/{{ mbstat.files.log_debug }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create update log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbstat.dirs.module }}/{{ mbstat.files.log_update }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "add updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ item.path }}/{{ mbstat.dirs.updates }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbstat.files.update_backend }}", path: "{{ mbstat.dirs.production }}" }
+    - { file: "{{ mbstat.files.testing_backend }}", path: "{{ mbstat.dirs.testing }}" }

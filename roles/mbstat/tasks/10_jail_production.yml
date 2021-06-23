@@ -1,0 +1,93 @@
+---
+- name: "register {{ mbstat.dirs.production }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.chroot }}/{{ mbstat.dirs.production }}"
+
+- name: "create {{ mbstat.dirs.module }} {{ mbstat.dirs.production }} jail directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.production }}"
+    - "{{ chroot_dir }}"
+    - "{{ chroot_dir }}/home"
+    - "{{ chroot_dir }}/root"
+    - "{{ chroot_dir }}/etc"
+    - "{{ chroot_dir }}/tmp"
+    - "{{ chroot_dir }}/dev"
+    - "{{ chroot_dir }}/usr"
+    - "{{ chroot_dir }}/usr/bin"
+    - "{{ chroot_dir }}/usr/sbin"
+    - "{{ chroot_dir }}/var"
+    - "{{ chroot_dir }}/var/log"
+    - "{{ chroot_dir }}/usr/lib"
+    - "{{ chroot_dir }}/usr/lib64/gconv"
+    - "{{ chroot_dir }}/usr/share/zoneinfo"
+    - "{{ chroot_dir }}/usr/share/freeradius"
+    - "{{ chroot_dir }}{{ OS.fpm.dirs.logs }}"
+    - "{{ chroot_dir }}{{ OS.fpm.dirs.save_path }}"
+    - "{{ chroot_dir }}{{ billing.dirs.home }}/config"
+    - "{{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }}"
+    - "{{ chroot_dir }}{{ mbstat.dirs.www }}/{{ mbstat.dirs.module }}"
+
+- name: "create soft links"
+  command: "ln -sf {{ item }} ./"
+  args:
+    chdir: "{{ chroot_dir }}"
+    warn: false
+  with_items:
+    - "usr/bin"
+    - "usr/sbin"
+    - "usr/lib"
+    - "usr/lib64"
+
+- name: "copy zoneinfo files"
+  command: "cp -fR --parents /usr/share/zoneinfo {{ chroot_dir }}"
+
+- name: "copy gconv files"
+  command: "cp -fR --parents /usr/lib64/gconv {{ chroot_dir }}"
+  when: ansible_os_family | lower == "redhat"
+
+- name: "copy gconv files"
+  command: "cp -fR --parents /usr/lib/x86_64-linux-gnu/gconv {{ chroot_dir }}"
+  when: ansible_os_family | lower == "debian"
+
+- name: "mknod devices in chroot"
+  command: "mknod -m 0666 {{ item.localdev }} c 1 {{ item.localvalue }} creates={{ item.localdev }}"
+  args:
+    chdir: "{{ chroot_dir }}"
+  with_items:
+    - { localdev: 'dev/null',    localvalue: '3'}
+    - { localdev: 'dev/random',  localvalue: '8'}
+    - { localdev: 'dev/urandom', localvalue: '9'}
+    - { localdev: 'dev/zero',    localvalue: '5'}
+  tags: mknod_devices
+
+- name: "create hard links"
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ chroot_dir }}{{ item.dest }}"
+    state: hard
+    force: yes
+    mode: u=rw,g=r,o=r
+    owner: root
+    group: root
+  loop:
+    - { src: "/usr/share/zoneinfo/{{ timezone.stdout }}", dest: "/etc/localtime" }
+    - { src: "/etc/resolv.conf", dest: "/etc/resolv.conf" }
+    - { src: "/etc/hosts", dest: "/etc/hosts" }
+
+- name: "copy script for add to chroot prog"
+  template:
+    src: "add_to_chroot.sh"
+    dest: "{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.production }}/add_to_chroot.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=r,o=r
+
+- name: "add base prog to chroot"
+  command: "bash {{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.production }}/add_to_chroot.sh {{ item }}"
+  with_items:
+    - "{{ billing.chroot_programs }}"

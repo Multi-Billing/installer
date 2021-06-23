@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbstat.dirs.module }} {{ mbstat.dirs.production }}"
+  command: "/bin/bash {{ mbstat.files.update_backend }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.production }}/{{ mbstat.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbstat.dirs.module }} {{ mbstat.dirs.testing }}"
+  command: "/bin/bash {{ mbstat.files.testing_backend }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbstat.dirs.module }}/{{ mbstat.dirs.testing }}/{{ mbstat.dirs.updates }}"
+  ignore_errors: yes

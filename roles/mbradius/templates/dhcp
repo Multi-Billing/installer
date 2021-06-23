@@ -1,0 +1,97 @@
+server dhcp {
+	port = 67
+	ipaddr = *
+	interface = eth0
+	
+	listen {
+		type = dhcp
+		ipaddr = *
+		port = ${..port}
+		#interface = ${..interface}
+		# It's set to "no" here for testing.
+		broadcast = no
+	}
+
+	dhcp DHCP-Discover {
+		# Set server ID field (it MUST be in the reply packet)
+		update reply {
+			DHCP-DHCP-Server-Identifier = "{{ ansible_default_ipv4.address }}"
+		}
+		
+		linelog
+		perl
+		
+		#Update reponse if request succeeded
+		if (ok) {
+			# Address was found
+			update reply {
+				DHCP-Message-Type = DHCP-Offer
+			}
+		} else {
+			#In any other case - don't send anything:
+			update reply {
+				DHCP-Message-Type = 0
+			}
+		}
+		
+		linelog
+		ok
+	}
+
+	dhcp DHCP-Request {
+		# Set server ID field (it MUST be in the reply packet)
+		update reply {
+			DHCP-DHCP-Server-Identifier = "{{ ansible_default_ipv4.address }}"
+		}
+		
+		linelog
+		perl
+		
+		if (ok) {
+			# Address was found
+			update reply {
+				DHCP-Message-Type = DHCP-ACK
+			}
+		}
+		elsif (notfound) {
+			# Address was not found, send NAK response
+			update reply {
+				DHCP-Message-Type = DHCP-NAK
+			}
+		}
+		else {
+			#In any other case - don't send anything:
+			update reply {
+				DHCP-Message-Type = 0 
+			}
+		}
+		
+		linelog
+		ok
+	}
+
+	dhcp DHCP-Decline {
+		update reply {
+			   DHCP-Message-Type = 0
+		}
+		reject
+	}
+
+	dhcp DHCP-Inform {
+		update reply {
+			   DHCP-Message-Type = 0
+		}
+		reject
+	}
+
+	dhcp DHCP-Release {
+		update reply {
+			   DHCP-Message-Type = 0
+		}
+		reject
+	}
+
+	dhcp {
+		handled
+	}
+}

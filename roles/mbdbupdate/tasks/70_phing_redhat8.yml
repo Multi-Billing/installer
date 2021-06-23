@@ -1,0 +1,14 @@
+---
+- name: "Install"
+  become: true
+  get_url:
+    url: https://www.phing.info/get/phing-latest.phar
+    dest: /usr/local/bin/phing
+    mode: 0755
+    force: true
+
+- name: "Create a symbolic link"
+  file:
+    src: /usr/local/bin/phing
+    dest: /usr/bin/phing
+    state: link

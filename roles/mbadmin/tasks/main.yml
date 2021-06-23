@@ -1,0 +1,26 @@
+---
+- include_tasks: 10_jail_production.yml
+- include_tasks: 10_jail_testing.yml
+- include_tasks: 20_fpm.yml
+- include_tasks: 30_nginx.yml
+- include_tasks: 40_hosts.yml
+- include_tasks: 50_dirs.yml
+- include_tasks: 60_files.yml
+- include_tasks: 70_config.yml
+
+- name: "check {{ billing.mysql_connect }} exists"
+  stat:
+    path: "{{ billing.mysql_connect }}"
+  register: mysql_connect
+
+- include_tasks: 80_mysql_user_auto.yml
+  when: mysql_connect.stat.exists == True
+
+- include_tasks: 81_mysql_user_manual.yml
+  when: mysql_connect.stat.exists == False
+
+- include_tasks: 90_mount.yml
+- include_tasks: 100_chmod.yml
+- include_tasks: 110_logrotate.yml
+- include_tasks: 120_cron.yml
+- include_tasks: 130_update.yml

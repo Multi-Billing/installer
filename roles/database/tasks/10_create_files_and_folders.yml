@@ -1,0 +1,49 @@
+---
+- name: "create log dir"
+  file:
+    path: "{{ OS.database.percona.dirs.logs }}" 
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
+- name: "create log file"
+  file:
+    path: "{{ OS.database.percona.dirs.logs }}/mysql.err" 
+    owner: root
+    group: root
+    mode: '0755'
+    state: touch
+
+- name: "create config dir"
+  file:
+    path: "{{ OS.database.percona.dirs.conf }}" 
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+  when: ansible_os_family | lower == 'debian'
+
+- name: "create billing dir"
+  file:
+    path: "{{ billing.dirs.home }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
+- name: "create mbadmin info file"
+  file:
+    path: "{{ billing.dirs.home }}/mbadmin.info"
+    owner: root
+    group: root
+    mode: '0700'
+    state: touch
+
+- name: "create mbadmin info file"
+  file:
+    path: "{{ billing.dirs.home }}/database_users.info"
+    owner: root
+    group: root
+    mode: '0700'
+    state: touch

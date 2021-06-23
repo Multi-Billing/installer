@@ -1,0 +1,12 @@
+---
+- name: install
+  package:
+    name:
+      - ntpdate
+      - wget
+      - sysstat
+      - net-tools
+      - python-apt
+      - make
+      - chrony
+    state: present

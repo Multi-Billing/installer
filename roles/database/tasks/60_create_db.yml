@@ -1,0 +1,20 @@
+---
+- name: "check if {{ mysql.database }} database exists"
+  shell: "mysqlshow --defaults-file={{ billing.mysql_connect }} | grep -v Wildcard | grep -o {{ mysql.database }}"
+  ignore_errors: yes
+  failed_when: false
+  register: database_prod
+
+- name: "create {{ mysql.database }} database"
+  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "CREATE DATABASE {{ mysql.database }} DEFAULT CHARACTER SET {{ mysql.encoding }} COLLATE {{ mysql.collation }};"
+  when: database_prod.stdout == ""
+
+- name: "check if {{ mysql.testing }} database exists"
+  shell: "mysqlshow --defaults-file={{ billing.mysql_connect }} | grep -v Wildcard | grep -o {{ mysql.testing }}"
+  ignore_errors: yes
+  failed_when: false
+  register: database_test
+
+- name: "create {{ mysql.testing }} database"
+  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "CREATE DATABASE {{ mysql.testing }} DEFAULT CHARACTER SET {{ mysql.encoding }} COLLATE {{ mysql.collation }};"
+  when: database_test.stdout == ""

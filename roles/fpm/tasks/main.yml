@@ -1,0 +1,5 @@
+---
+- name: "add to startup"
+  service:
+    name: "{{ OS.fpm.name }}"
+    enabled: yes

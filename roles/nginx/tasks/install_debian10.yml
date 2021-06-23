@@ -1,0 +1,24 @@
+---
+- name: "add nginx repo"
+  apt_repository:
+    repo: "deb http://nginx.org/packages/debian/ {{ ansible_distribution_release }} nginx"
+    state: present
+    update_cache: false
+
+- name: "add nginx key"
+  apt_key:
+    url: https://nginx.org/packages/keys/nginx_signing.key
+    state: present
+
+- name: "update apt caches after repo is added"
+  apt: update_cache=true
+
+- name: install
+  package:
+    name: nginx
+    state: present
+
+- name: "add to startup"
+  service:
+    name: "{{ OS.nginx.name }}"
+    enabled: yes

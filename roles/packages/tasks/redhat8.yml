@@ -1,0 +1,11 @@
+---
+- name: install
+  package:
+    name:
+      - wget
+      - sysstat
+      - net-tools
+      - which
+      - make
+      - chrony
+    state: present

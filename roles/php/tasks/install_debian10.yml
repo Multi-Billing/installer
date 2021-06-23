@@ -1,0 +1,24 @@
+---
+- name: "install modules"
+  apt:
+    name:
+       - php7.3
+       - php7.3-cli
+       - php7.3-cgi
+       - php7.3-dev
+       - php7.3-fpm
+       - php7.3-common
+       - php7.3-xsl
+       - php7.3-sybase
+       - php7.3-snmp
+       - php7.3-curl
+       - php7.3-pspell
+       - php7.3-xmlrpc
+       - php7.3-mbstring
+       - php7.3-recode
+       - php7.3-imap
+       - php7.3-gmp
+       - php7.3-mysql
+       - php7.3-zip
+       - libphp7.3-embed
+    state: present

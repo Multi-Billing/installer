@@ -1,0 +1,14 @@
+---
+- name: "create db roles"
+  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "CREATE ROLE {{ item }};"
+  ignore_errors: yes
+  failed_when: false
+  with_items:
+    - "{{ mbadmin.software.database.mysql_role }}"
+    - "{{ mbkernel.software.database.mysql_role }}"
+    - "{{ mbpayments.software.database.mysql_role }}"
+    - "{{ mbradius.software.database.mysql_role }}"
+    - "{{ mbstat.software.database.mysql_role }}"
+    - "{{ mbqueue.software.database.mysql_role }}"
+    - "{{ mbdbupdate.software.database.mysql_role }}"
+    - "{{ mbcabapi.software.database.mysql_role }}"

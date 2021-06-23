@@ -1,0 +1,9 @@
+---
+- name: "check info to show"
+  stat:
+    path: "{{ billing.mysql_connect }}"
+  register: show_info
+
+- name: "show info"
+  debug: msg="{{ lookup('file', '{{ billing.mysql_connect }}').splitlines() }}"
+  when: show_info.stat.exists

@@ -1,0 +1,8 @@
+---
+- name: "add logrotate file"
+  template:
+    src: "mbqueue.logrotate"
+    dest: "{{ OS.logrotate }}/mbqueue"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx

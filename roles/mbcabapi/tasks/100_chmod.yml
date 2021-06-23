@@ -1,0 +1,30 @@
+---
+- name: "chmod {{ mbcabapi.dirs.module }} dirs"
+  file: 
+    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item }}/public"
+    owner: "{{ OS.fpm.config.pool.listen.user }}"
+    group: "{{ OS.fpm.config.pool.listen.group }}"
+    mode: u=rwX,g=rX,o=rX
+    recurse: yes
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "chmod 777 on chroot /tmp"
+  file: 
+    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.chroot }}/{{ item }}/tmp"
+    owner: "root"
+    group: "root"
+    mode: u=rwx,g=rwx,o=rwx
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"
+
+- name: "chmod chroot sessions dir"
+  file: 
+    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.chroot }}/{{ item }}{{ OS.fpm.dirs.save_path }}"
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.group }}"
+  with_items:
+    - "{{ mbcabapi.dirs.production }}"
+    - "{{ mbcabapi.dirs.testing }}"

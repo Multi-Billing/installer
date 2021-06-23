@@ -1,0 +1,37 @@
+---
+- name: "install percona-release"
+  yum:
+     name: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
+     disable_gpg_check: true
+     state: present
+
+- name: "disable mysql by dnf"
+  shell: dnf -y module disable mysql
+  args:
+    warn: no
+
+- name: "enable percona 8 release"
+  shell: percona-release setup ps80
+
+- name: "copy server my.cnf template"
+  template:
+    src: percona8.cnf
+    dest: "{{ OS.database.percona.dirs.conf }}/my.cnf"  
+    mode: u=rw,g=r,o=r
+
+- name: "create log file"
+  file:
+    path: "{{ OS.database.percona.dirs.logs }}/mysql.err" 
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+    state: touch
+
+- name: "install percona server"
+  yum:
+    name:
+      - percona-server-server
+      - percona-server-client
+      - percona-server-devel
+    disable_gpg_check: true
+    state: present

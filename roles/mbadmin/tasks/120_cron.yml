@@ -1,0 +1,13 @@
+---
+- name: "add cron file"
+  template:
+    src: "mbadmin.cron"
+    dest: "{{ OS.cron.dirs.custom }}/mbadmin"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+
+- name: "restart {{ OS.cron.name }} service"
+  service:
+    name: "{{ OS.cron.name }}"
+    state: restarted

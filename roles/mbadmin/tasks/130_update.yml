@@ -1,0 +1,18 @@
+---
+- name: "update {{ mbadmin.dirs.module }} {{ mbadmin.dirs.production }}"
+  command: "/bin/bash {{ item }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/{{ mbadmin.dirs.updates }}"
+  with_items:
+    - "{{ mbadmin.files.update_backend }}"
+    - "{{ mbadmin.files.update_frontend }}"
+  ignore_errors: yes
+
+- name: "update {{ mbadmin.dirs.module }} {{ mbadmin.dirs.testing }}"
+  command: "/bin/bash {{ item }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.testing }}/{{ mbadmin.dirs.updates }}"
+  with_items:
+    - "{{ mbadmin.files.testing_backend }}"
+    - "{{ mbadmin.files.testing_frontend }}"
+  ignore_errors: yes

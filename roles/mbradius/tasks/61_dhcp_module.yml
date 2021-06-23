@@ -1,0 +1,14 @@
+---
+- name: "install dhcp module"
+  template:
+    src: "dhcp"
+    dest: "{{ OS.radius.dirs.conf }}/sites-enabled/dhcp"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "copy clear dump"
+  copy:
+    src: "linelog"
+    dest: "{{ OS.radius.dirs.conf }}/modules/linelog"
+    mode: 0644

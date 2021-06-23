@@ -1,0 +1,34 @@
+---
+- name: "disable old startup"
+  service:
+    name: "{{ OS.radius.alias }}"
+    enabled: no
+  ignore_errors: yes
+
+- name: "remove default systemd service"
+  file:
+    path: "{{ OS.systemd }}/{{ OS.radius.alias }}"
+    state: absent
+
+- name: "install new systemd service"
+  template:
+    src: "{{ OS.radius.alias }}"
+    dest: "{{ OS.systemd }}/{{ OS.radius.alias }}"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "reload systemd"
+  command: systemctl daemon-reload
+
+- name: "make new startup"
+  service:
+    name: "{{ OS.radius.alias }}"
+    enabled: yes
+  ignore_errors: yes
+
+- name: "run service"
+  service:
+    name: "{{ OS.radius.alias }}"
+    state: started
+  ignore_errors: yes

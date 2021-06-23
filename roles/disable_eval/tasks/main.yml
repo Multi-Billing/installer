@@ -1,0 +1,14 @@
+---
+- name: "check disable_eval.ini"
+  stat:
+    path: "{{ OS.php.dirs.mods }}/10-disable_eval.ini"
+  register: disable_eval
+
+- include_tasks: unpack.yml
+  when: not disable_eval.stat.exists
+
+- include_tasks: complie.yml
+  when: not disable_eval.stat.exists
+
+- include_tasks: add_to_php.yml
+  when: not disable_eval.stat.exists

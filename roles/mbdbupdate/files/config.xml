@@ -1,0 +1,10 @@
+<config>
+	<parameters>
+		<mysql>
+			<host>{server_host}</host>
+			<username>{username}</username>
+			<password>{password}</password>
+			<dbname>{database}</dbname>
+		</mysql>
+	</parameters>
+</config>

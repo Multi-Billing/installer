@@ -1,0 +1,66 @@
+---
+# проверяем что подключение к mysql создано
+- name: "check {{ billing.mysql_connect }} exists"
+  stat:
+    path: "{{ billing.mysql_connect }}"
+  register: mysql_connect
+
+- name: "check if password already generated"
+  stat:
+    path: "{{ billing.dirs.tmp }}/mysql_password"
+  register: mysql_password
+
+- name: "create {{ billing.mysql_connect }}"
+  block:
+    - name: "save password into variable"
+      set_fact:
+        root_passwd: "{{ lookup('file', '{{ billing.dirs.tmp }}/mysql_password') }}"
+      when:
+        - mysql_password.stat.exists == true
+        - mysql.pass == ''
+
+    - name: "save password into variable"
+      set_fact:
+        root_passwd: "{{ lookup('file', '{{ billing.dirs.tmp }}/mysql_password') }}"
+      when: mysql.pass != ''
+
+    - name: "copy local template"
+      template:
+        src: local.cnf
+        dest: "{{ billing.mysql_connect }}"
+        mode: '0600'
+      when:
+        - billing.mysql_server == '127.0.0.1' or billing.mysql_server == 'localhost'
+
+    - name: "copy remote template"
+      template:
+        src: remote.cnf
+        dest: "{{ billing.mysql_connect }}"
+        mode: '0600'
+      when:
+        - billing.mysql_server != '127.0.0.1'
+        - billing.mysql_server != 'localhost'
+        - mysql.pass != ''
+
+    - name: "test connection"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -Ne "SELECT NOW();"
+      register: test_connect
+      failed_when: test_connect.rc == 255
+      ignore_errors: true
+      no_log: true
+
+    - name: "connection ok"
+      debug: msg="{{ test_connect.stderr }}"
+      when: test_connect.rc == 0
+
+    - name: "connection failed"
+      block:
+        - name: "show error"
+          debug: msg="{{ test_connect.stderr }}"
+
+        - name: "remove {{ billing.mysql_connect }}"
+          file:
+            path: "{{ billing.mysql_connect }}"
+            state: absent
+      when: test_connect.rc != 0
+  when: mysql_connect.stat.exists == False

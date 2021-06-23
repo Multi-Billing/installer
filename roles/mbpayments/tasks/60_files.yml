@@ -1,0 +1,49 @@
+---
+- name: "copy {{ mbpayments.dirs.module }} backend archive"
+  copy:
+    src: "{{ mbpayments.files.archive_backend }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbpayments.files.archive_backend }}"
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbpayments.dirs.module }} backend archive"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbpayments.files.archive_backend }}"
+    dest: "{{ billing.dirs.home }}/{{ mbpayments.dirs.module }}/{{ item }}/public/"
+  with_items:
+    - "{{ mbpayments.dirs.production }}"
+    - "{{ mbpayments.dirs.testing }}"
+
+- name: "create main log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpayments.dirs.module }}/{{ mbpayments.files.log_main }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create debug log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpayments.dirs.module }}/{{ mbpayments.files.log_debug }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create update log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpayments.dirs.module }}/{{ mbpayments.files.log_update }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "add updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbpayments.dirs.module }}/{{ item.path }}/{{ mbpayments.dirs.updates }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbpayments.files.update_backend }}", path: "{{ mbpayments.dirs.production }}" }
+    - { file: "{{ mbpayments.files.testing_backend }}", path: "{{ mbpayments.dirs.testing }}" }

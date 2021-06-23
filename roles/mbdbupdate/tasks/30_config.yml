@@ -1,0 +1,36 @@
+---
+- name: "replace {{ mbdbupdate.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdbupdate.dirs.module }}/{{ mbdbupdate.dirs.production }}/{{ mbdbupdate.dirs.config }}/{{ mbdbupdate.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdbupdate.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdbupdate.dirs.module }}/{{ mbdbupdate.dirs.production }}/{{ mbdbupdate.dirs.config }}/{{ mbdbupdate.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdbupdate.software.database.mysql_pass }}"
+  when: mbdbupdate.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbdbupdate.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdbupdate.dirs.module }}/{{ mbdbupdate.dirs.testing }}/{{ mbdbupdate.dirs.config }}/{{ mbdbupdate.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdbupdate.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdbupdate.dirs.module }}/{{ mbdbupdate.dirs.testing }}/{{ mbdbupdate.dirs.config }}/{{ mbdbupdate.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdbupdate.software.database.mysql_pass }}"
+  when: mbdbupdate.software.database.mysql_pass != ""
+  no_log: true

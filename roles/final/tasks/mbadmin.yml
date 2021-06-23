@@ -1,0 +1,18 @@
+---
+- name: "check info to show"
+  stat:
+    path: "{{ billing.dirs.home }}/sql_mbadmin.info"
+  register: show_info
+
+- name: "show info"
+  debug: msg="{{ lookup('file', '{{ billing.dirs.home }}/sql_mbadmin.info').splitlines() }}"
+  when: show_info.stat.exists
+
+- name: "check info to show"
+  stat:
+    path: "{{ billing.dirs.home }}/mbadmin.info"
+  register: show_info
+
+- name: "show info"
+  debug: msg="{{ lookup('file', '{{ billing.dirs.home }}/mbadmin.info').splitlines() }}"
+  when: show_info.stat.exists

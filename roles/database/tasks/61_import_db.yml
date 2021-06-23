@@ -1,0 +1,32 @@
+---
+- name: "check {{ mysql.database }} database is empty"
+  shell: "mysql --defaults-file={{ billing.mysql_connect }} {{ mysql.database }} -e 'SHOW TABLES'"
+  register: database_empty
+
+- name: "import clear data"
+  shell: "mysql --defaults-file={{ billing.mysql_connect }} {{ mysql.database }} < {{ billing.dirs.tmp }}/database.sql"
+  when:
+    - mysql.backup_file == ''
+    - database_empty.stdout == ""
+
+- name: "import backup: {{ mysql.backup_file }}"
+  shell: "mysql --defaults-file={{ billing.mysql_connect }} {{ mysql.database }} < {{ billing.dirs.tmp }}/database.sql"
+  when:
+    - mysql.backup_file != ''
+    - database_empty.stdout == ""
+
+- name: "check {{ mysql.testing }} database is empty"
+  shell: "mysql --defaults-file={{ billing.mysql_connect }} {{ mysql.testing }} -e 'SHOW TABLES'"
+  register: testing_empty
+
+- name: "import clear data"
+  shell: "mysql --defaults-file={{ billing.mysql_connect }} {{ mysql.testing }} < {{ billing.dirs.tmp }}/database.sql"
+  when:
+    - mysql.backup_file == ''
+    - testing_empty.stdout == ""
+
+- name: "import backup: {{ mysql.backup_file }}"
+  shell: "mysql --defaults-file={{ billing.mysql_connect }} {{ mysql.testing }} < {{ billing.dirs.tmp }}/database.sql"
+  when:
+    - mysql.backup_file != ''
+    - testing_empty.stdout == ""

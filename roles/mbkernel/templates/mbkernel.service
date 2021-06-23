@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing kernel
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbkernel.system_user }}
+RuntimeDirectory={{ mbkernel.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbkernel.params.production.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbkernel.dirs.module }}/{{ mbkernel.dirs.production }}/kernel.php --noroot
+ExecReload=/bin/kill -s SIGHUP $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,49 @@
+mbpayments:
+  software:
+    database:
+      mysql_user: "mbpayments"
+      mysql_role: "role_mbpayments"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+    nginx:
+      subdomain:
+        # поддомен админки, если основной домен ispnet.demo
+        # то получится:
+        #   рабочая версия: payments.ispnet.demo
+        #   тестовая версия: test.payments.ispnet.demo
+        production: "payments"
+        testing: "test.payments"
+    fpm:
+      production:
+        pool_name: "mbpayments_production"
+        pool_file: "mbpayments_production.conf"
+        socket: "/var/run/php-fpm_mbpayments_production.sock"
+      testing:
+        pool_name: "mbpayments_testing"
+        pool_file: "mbpayments_testing.conf"
+        socket: "/var/run/php-fpm_mbpayments_testing.sock"
+  dirs:
+    module: "mbpayments"
+    chroot: "chroot"
+    www: "/var/www"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    archive_backend: "mbpayments.tar.gz"
+    update_backend: "mbpayments_update.sh"
+    testing_backend: "mbpayments_testing.sh"
+    config: "config.xml"
+    log_main: "mbpayments.log"
+    log_debug: "mbpayments.debug"
+    log_update: "update.log"
+  requirements:
+    ram: 1864
+    cores: 2

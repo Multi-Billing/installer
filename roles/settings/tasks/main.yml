@@ -1,0 +1,17 @@
+---
+- include_tasks: 10_limits.yml
+
+- name: "check php installed"
+  command: command -v php
+  register: php_installed
+  failed_when: php_installed.rc == 255
+  ignore_errors: true
+  no_log: true
+
+- include_tasks: 20_php.ini.yml
+  when: php_installed.rc == 0
+
+- include_tasks: 30_sessions_path.yml
+  when: php_installed.rc == 0
+
+- include_tasks: 40_sysctl.yml

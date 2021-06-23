@@ -1,0 +1,120 @@
+OS:
+  database:
+    percona:
+      name: mysql
+      version: 8.0
+      alias: mysql.service
+      systemd: /etc/systemd/system/mysql.service
+      socket: /var/run/mysqld/mysqld.sock
+      dirs:
+        conf: /etc/mysql
+        logs: /var/log/mysql
+        data: /var/lib/mysql
+        run: /var/run/mysqld
+      firstrun_pwd: mysqld.log
+
+  radius:
+    name: freeradius
+    version: 3
+    alias: freeradiusd.service
+    systemd: ""
+    dirs:
+      conf: /etc/freeradius/3.0
+      logs: /var/log/radius
+      perl: /etc/perl
+      attr: /usr/share/freeradius
+    files:
+      conf: radiusd.conf
+      sql: sql.conf
+
+  php:
+    dirs:
+      conf: /etc/php/7.3
+      mods: /etc/php/7.3/mods-available
+    files:
+      ini: php.ini
+      cli: cli/php.ini
+
+  fpm:
+    name: php7.3-fpm
+    files:
+      ini: fpm/php.ini
+      conf: fpm/php-fpm.conf
+      pool: www.conf
+      socket: /var/run/php-fpm.sock
+    dirs:
+      conf: /etc/php/7.3
+      pool: /etc/php/7.3/fpm/pool.d
+      logs: /var/log/php-fpm
+      save_path: /var/lib/php/session
+    config:
+      fpm:
+        demonized: "yes"
+      pool:
+        name: www
+        user: www-data
+        group: www-data
+        listen:
+          user: www-data
+          group: www-data
+
+  nginx:
+    name: nginx
+    owner: nginx
+    dirs:
+      conf: /etc/nginx
+      ssl: /etc/nginx/conf.d/ssl
+      logs: /var/log/nginx
+    files:
+      ssl_key: ca.key
+      ssl_cert: ca.crt
+      config: nginx.conf
+      fastcgi: fastcgi
+
+  dhcp:
+    package: isc-dhcp-server
+    name: isc-dhcp-server
+    files:
+      conf: dhcpd.conf
+    dirs:
+      conf: /etc/dhcp
+
+  dns:
+    package: unbound
+    name: unbound
+    files:
+      conf: unbound.conf
+    dirs:
+      conf: /etc/unbound
+
+  ioncube:
+    dirs:
+      data: /usr/local/ioncube
+    files:
+      so: ioncube_loader_lin_7.3.so
+      ts: ioncube_loader_lin_7.3_ts.so
+
+  mrtg:
+    package: mrtg
+    dirs:
+      conf: /etc/mrtg
+    files:
+      users: mrtg_mikbill_users.conf
+      tarif: mrtg_mikbill_tarif.conf
+
+  cron:
+    name: cron
+    dirs:
+      custom: /etc/cron.d
+
+  selinux: 0
+  hosts: /etc/hosts
+  sysctl: /etc/sysctl.conf
+  sudo: /etc/sudoers.d
+  logrotate: /etc/logrotate.d/
+  systemctl: /usr/bin/systemctl
+  radclient: /usr/bin/radclient
+  echo: /bin/echo
+  snmpwalk: /usr/bin/snmpwalk
+  snmpget:  /usr/bin/snmpget
+  libs: /lib/x86_64-linux-gnu
