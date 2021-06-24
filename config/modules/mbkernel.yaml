@@ -37,7 +37,7 @@ mbkernel:
     testing: "mbkernel_testing.sh"
     config: "config.xml"
     log_main: "mbkernel.log"
-    log_debug: "debug.log"
+    log_debug: "mbkernel.debug"
     log_update: "update.log"
   requirements:
     ram: 1864

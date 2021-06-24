@@ -23,7 +23,7 @@ mbqueue:
     testing: "mbqueue_testing.sh"
     config: "config.xml"
     log_main: "mbqueue.log"
-    log_debug: "debug.log"
+    log_debug: "mbqueue.debug"
     log_update: "update.log"
     scripts: ["5min.sh", "block.sh", "day.sh", "lastday.sh", "mrtg.sh", "mth.sh"]
   requirements:

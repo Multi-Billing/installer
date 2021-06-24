@@ -12,11 +12,12 @@
     - "mbcabapi"
 
 - include_tasks: 10_create_files_and_folders.yml
-- include_tasks: 20_connect_password.yml
-- include_tasks: "30_install_percona_{{ ansible_os_family | lower }}{{ ansible_distribution_major_version }}.yml"
-  when: billing.install_percona
 
-- include_tasks: 40_change_connect_password.yml
+- name: "install_percona"
+  block:
+    - include_tasks: 20_connect_password.yml
+    - include_tasks: "30_install_percona_{{ ansible_os_family | lower }}{{ ansible_distribution_major_version }}.yml"
+    - include_tasks: 40_change_connect_password.yml
   when: billing.install_percona
 
 - include_tasks: 50_copy_dump.yml

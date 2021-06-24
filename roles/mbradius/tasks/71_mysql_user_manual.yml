@@ -2,9 +2,8 @@
 # создание переменных для облегчения переноса на другие модули
 - name: "register variables"
   set_fact:
-    module_name="{{ mbradius.dirs.module }}"
-    config_path_production="{{ billing.dirs.home }}/{{ mbradius.dirs.module }}/{{ mbradius.dirs.production }}/{{ mbradius.dirs.config }}/{{ mbradius.files.config }}"
-    config_path_testing="{{ billing.dirs.home }}/{{ mbradius.dirs.module }}/{{ mbradius.dirs.testing }}/{{ mbradius.dirs.config }}/{{ mbradius.files.config }}"
+    module_name="mbradius"
+    config_path="{{ OS.radius.dirs.conf }}/{{ OS.radius.files.sql }}"
     configuration="{{ mbradius.software.database }}"
 
 # создание переменных для удобства
@@ -64,8 +63,7 @@
     mode: 0700
     content: |
       You will need to create MySQL user for {{ module_name }} by yourself and configure MySQL connection in config
-      {{ config_path_production }}
-      {{ config_path_testing }}
+      {{ config_path }}
       Example:
       CREATE USER '{{ mysql_user }}'@'{{ mysql_user }}' IDENTIFIED WITH mysql_native_password BY '{{ mysql_pass }}' REQUIRE NONE;
       GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ user_host }}';
@@ -75,15 +73,7 @@
 # заменяем пароль в конфиге
 - name: "replace mysql password"
   replace:
-    path: "{{ config_path_production }}"
-    regexp: "{password}"
-    replace: "{{ mysql_pass }}"
-  no_log: true
-  when: mysql_pass is defined
-
-- name: "replace mysql password"
-  replace:
-    path: "{{ config_path_testing }}"
+    path: "{{ config_path }}"
     regexp: "{password}"
     replace: "{{ mysql_pass }}"
   no_log: true

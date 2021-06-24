@@ -29,8 +29,7 @@
         src: local.cnf
         dest: "{{ billing.mysql_connect }}"
         mode: '0600'
-      when:
-        - billing.mysql_server == '127.0.0.1' or billing.mysql_server == 'localhost'
+      when: billing.mysql_server == '127.0.0.1' or billing.mysql_server == 'localhost'
 
     - name: "copy remote template"
       template:

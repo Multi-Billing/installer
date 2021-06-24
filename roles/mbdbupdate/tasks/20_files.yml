@@ -28,14 +28,11 @@
 
 - name: "create log file"
   file:
-    path: "{{ billing.dirs.home }}/{{ mbdbupdate.dirs.module }}/{{ item }}/{{ billing.dirs.logs }}/{{ mbdbupdate.files.log_update }}"
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdbupdate.dirs.module }}/{{ mbdbupdate.files.log_update }}"
     state: touch
     owner: root
     group: root
     mode: u=rw,g=rw,o=rw
-  with_items:
-    - "{{ mbdbupdate.dirs.production }}"
-    - "{{ mbdbupdate.dirs.testing }}"
 
 - name: "setup updater"
   template:
