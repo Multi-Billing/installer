@@ -58,14 +58,31 @@
 # создаем пользователя
 - name: "create {{ module_name }} user"
   block:
+    - name: "register PerconaDB/MySQL queues"
+      set_fact:
+        SQL_CREATE="CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED WITH mysql_native_password BY '{{ mysql_pass }}' REQUIRE NONE;"
+        SQL_RIGHTS="GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+        SQL_ROLE="SET DEFAULT ROLE '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+
+    - name: "detect version"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -Ne "SHOW VARIABLES LIKE 'version';"
+      register: dbms_version
+
+    - name: "register MariaDB queues"
+      set_fact:
+        SQL_CREATE="CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED BY '{{ mysql_pass }}' REQUIRE NONE;"
+        SQL_RIGHTS="GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+        SQL_ROLE="SET DEFAULT ROLE '{{ mysql_role }}' FOR '{{ mysql_user }}'@'{{ client_ip }}';"
+      when: '"MariaDB" in dbms_version.stdout'
+
     - name: "run queue"
-      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED WITH mysql_native_password BY '{{ mysql_pass }}' REQUIRE NONE;"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_CREATE }}"
 
     - name: "apply rights"
-      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_RIGHTS }}"
 
-    - name: "apply default role"
-      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "SET DEFAULT ROLE '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+    - name: "default role"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_ROLE }}"
 
     - name: "mark completed"
       file:

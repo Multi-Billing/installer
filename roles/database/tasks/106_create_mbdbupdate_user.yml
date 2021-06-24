@@ -1,11 +1,9 @@
 ---
-# регистрация имени модуля для использовании в названии файлов
-- name: "register module_name"
-  set_fact: module_name="{{ mbdbupdate.dirs.module }}"
-
-# дублируем часть конфига в переменную для облегчения переноса в другие модули
-- name: "register configuration"
-  set_fact: configuration="{{ mbdbupdate.software.database }}"
+# создание переменных для облегчения переноса на другие модули
+- name: "register variables"
+  set_fact:
+    module_name="{{ mbdbupdate.dirs.module }}"
+    configuration="{{ mbdbupdate.software.database }}"
 
 # создание переменных для удобства
 - name: "register mysql_user"
@@ -47,14 +45,31 @@
         user_pass: "{{ custom_pass }}"
       when: custom_pass != ""
 
+    - name: "register PerconaDB/MySQL queues"
+      set_fact:
+        SQL_CREATE="CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED WITH mysql_native_password BY '{{ user_pass }}' REQUIRE NONE;"
+        SQL_RIGHTS="GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+        SQL_ROLE="SET DEFAULT ROLE '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+
+    - name: "detect version"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -Ne "SHOW VARIABLES LIKE 'version';"
+      register: dbms_version
+
+    - name: "register MariaDB queues"
+      set_fact:
+        SQL_CREATE="CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED BY '{{ user_pass }}' REQUIRE NONE;"
+        SQL_RIGHTS="GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+        SQL_ROLE="SET DEFAULT ROLE '{{ mysql_role }}' FOR '{{ mysql_user }}'@'{{ client_ip }}';"
+      when: '"MariaDB" in dbms_version.stdout'
+
     - name: "run queue"
-      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED WITH mysql_native_password BY '{{ user_pass }}' REQUIRE NONE;"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_CREATE }}"
 
     - name: "apply rights"
-      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_RIGHTS }}"
 
     - name: "default role"
-      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "SET DEFAULT ROLE '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_ROLE }}"
 
     - name: "add to {{ billing.dirs.home }}/database_users.info"
       blockinfile:
