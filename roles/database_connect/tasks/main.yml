@@ -76,5 +76,9 @@
           file:
             path: "{{ billing.mysql_connect }}"
             state: absent
+
+        - name: "stop playing"
+          meta: end_play
+          when: mysql.pass != ''
       when: test_connect.rc != 0
   when: mysql_connect.stat.exists == False
