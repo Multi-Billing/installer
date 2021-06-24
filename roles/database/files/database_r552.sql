@@ -131,7 +131,7 @@ CREATE TABLE `addons_absebbankas` (
   `comment` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_latvian_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1052,7 +1052,7 @@ CREATE TABLE `addons_luminorbank` (
   `comment` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_latvian_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1082,7 +1082,7 @@ CREATE TABLE `addons_maxima` (
   `comment` varchar(128) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1687,7 +1687,7 @@ CREATE TABLE `addons_perlas` (
   `comment` varchar(128) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2418,7 +2418,7 @@ CREATE TABLE `addons_swedbank` (
   `comment` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_latvian_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2591,7 +2591,7 @@ CREATE TABLE `addons_vienasaskaita` (
   `comment` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_latvian_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4028,7 +4028,7 @@ DROP TABLE IF EXISTS `geo_map_geometry`;
 CREATE TABLE `geo_map_geometry` (
   `id` int NOT NULL AUTO_INCREMENT,
   `object_id` int NOT NULL,
-  `type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `coordinates` blob NOT NULL,
   PRIMARY KEY (`id`),
   KEY `object_id` (`object_id`),
@@ -4054,7 +4054,7 @@ DROP TABLE IF EXISTS `geo_map_maps`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `geo_map_maps` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `name` blob NOT NULL,
   `description` blob,
   `lat` double(8,6) NOT NULL,
@@ -4084,7 +4084,7 @@ DROP TABLE IF EXISTS `geo_map_objects`;
 CREATE TABLE `geo_map_objects` (
   `id` int NOT NULL AUTO_INCREMENT,
   `map_id` int NOT NULL,
-  `type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `map_id` (`map_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=koi8r;
@@ -4109,7 +4109,7 @@ DROP TABLE IF EXISTS `geo_map_properties`;
 CREATE TABLE `geo_map_properties` (
   `id` int NOT NULL AUTO_INCREMENT,
   `object_id` int NOT NULL,
-  `key` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `key` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `value` blob,
   PRIMARY KEY (`id`),
   KEY `object_id` (`object_id`),
