@@ -36,7 +36,7 @@
 
     - name: "save password into variable"
       set_fact:
-        root_passwd: "{{ lookup('file', '{{ billing.dirs.tmp }}/mysql_password') }}"
+        root_passwd: "{{ mysql.pass }}"
       when: mysql.pass != ''
 
     - name: "copy local template"
