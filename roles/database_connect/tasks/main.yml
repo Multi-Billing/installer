@@ -10,9 +10,7 @@
   package:
     name: mysql
     state: present
-  when:
-    - mysql_client.rc == 1
-    - billing.install_percona == false
+  when: mysql_client.rc == 1
 
 # проверяем что подключение к mysql создано
 - name: "check {{ billing.mysql_connect }} exists"
