@@ -1,4 +1,19 @@
 ---
+- name: "check mysql_client installed"
+  command: command -v mysql
+  register: mysql_client
+  failed_when: mysql_client.rc == 255
+  ignore_errors: true
+  no_log: true
+
+- name: "install mysql_client"
+  package:
+    name: mysql
+    state: present
+  when:
+    - mysql_client.rc == 1
+    - billing.install_percona == false
+
 # проверяем что подключение к mysql создано
 - name: "check {{ billing.mysql_connect }} exists"
   stat:
