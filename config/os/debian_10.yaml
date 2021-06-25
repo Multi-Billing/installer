@@ -4,7 +4,7 @@ OS:
       name: mysql
       version: 8.0
       alias: mysql.service
-      systemd: /etc/systemd/system/mysql.service
+      systemd: /usr/lib/systemd/system/mysql.service
       socket: /var/run/mysqld/mysqld.sock
       dirs:
         conf: /etc/mysql
@@ -99,8 +99,8 @@ OS:
     dirs:
       conf: /etc/mrtg
     files:
-      users: mrtg_mikbill_users.conf
-      tarif: mrtg_mikbill_tarif.conf
+      users: mrtg_users.conf
+      tarif: mrtg_tarif.conf
 
   cron:
     name: cron
@@ -113,6 +113,7 @@ OS:
   sudo: /etc/sudoers.d
   logrotate: /etc/logrotate.d/
   systemctl: /usr/bin/systemctl
+  systemd: /usr/lib/systemd/system
   radclient: /usr/bin/radclient
   echo: /bin/echo
   snmpwalk: /usr/bin/snmpwalk

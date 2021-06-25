@@ -4,7 +4,7 @@ OS:
       name: mysql
       version: 8.0
       alias: mysql.service
-      systemd: /etc/systemd/system/mysql.service
+      systemd: /usr/lib/systemd/system/mysql.service
       socket: /var/lib/mysql/mysql.sock
       dirs:
         conf: /etc

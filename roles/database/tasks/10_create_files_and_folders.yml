@@ -12,7 +12,7 @@
     path: "{{ OS.database.percona.dirs.logs }}/mysql.err" 
     owner: root
     group: root
-    mode: '0755'
+    mode: '0777'
     state: touch
 
 - name: "create config dir"

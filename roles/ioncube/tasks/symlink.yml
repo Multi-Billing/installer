@@ -8,9 +8,12 @@
   with_items:
     - "{{ OS.php.dirs.conf }}/cli/conf.d/04-ioncube.ini"
     - "{{ OS.fpm.dirs.conf }}/fpm/conf.d/04-ioncube.ini"
-  notify:
-    - restart fpm
   when: ansible_os_family | lower == 'debian'
+
+- name: "restart php-fpm service"
+  service:
+    name: "{{ OS.fpm.name }}"
+    state: restarted
 
 - name: "chmod"
   file: 
