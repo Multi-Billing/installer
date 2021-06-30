@@ -132,9 +132,9 @@ if [ "${MD5_CURRENT}" != "${MD5_DOWNLOADED}" ]; then
     rm -f "${FILE_NAME}.tar.gz"
   fi
 
-  if [ -f "${BILL_HOME}/mbdbupdate/production/mbdbupdate_update.sh" ]; then
+  if [ -f "${BILL_HOME}/mbsql/production/mbsql_update.sh" ]; then
     upd_log "apply sql update"
-    bash "${BILL_HOME}/mbdbupdate/production/mbdbupdate_update.sh"
+    bash "${BILL_HOME}/mbsql/production/mbsql_update.sh"
   fi
 else
   upd_log "installed latest ${FILE_NAME}"

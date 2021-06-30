@@ -1,0 +1,76 @@
+---
+- name: "copy {{ mbcron.files.archive }}"
+  copy:
+    src: "{{ mbcron.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbcron.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbcron.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbcron.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbcron.dirs.production }}"
+    - "{{ mbcron.dirs.testing }}"
+
+- name: "copy {{ mbcron.files.config }} files"
+  copy:
+    src: "{{ mbcron.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ item }}/{{ mbcron.dirs.config }}/{{ mbcron.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbcron.dirs.production }}"
+    - "{{ mbcron.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcron.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbcron.files.log_main }}"
+    - "{{ mbcron.files.log_debug }}"
+    - "{{ mbcron.files.log_update }}"
+
+- name: "setup updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ item.dst }}/{{ mbcron.dirs.updates }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rw,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbcron.files.updates }}", dst: "{{ mbcron.dirs.production }}" }
+    - { file: "{{ mbcron.files.testing }}", dst: "{{ mbcron.dirs.testing }}" }
+
+- name: "register {{ mbcron.dirs.production }} path"
+  set_fact: module_path="{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}"
+
+- name: "setup {{ mbcron.dirs.production }} scripts"
+  template:
+    src: "scripts/{{ item }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/{{ item }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbcron.files.scripts }}"
+
+- name: "register {{ mbcron.dirs.testing }} path"
+  set_fact: module_path="{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}"
+
+- name: "setup {{ mbcron.dirs.production }} scripts"
+  template:
+    src: "scripts/{{ item }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/scripts/{{ item }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbcron.files.scripts }}"

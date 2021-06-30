@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing testing core
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbcore.system_user }}
+RuntimeDirectory={{ mbcore.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbcore.params.testing.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ mbcore.dirs.testing }}/mbcore.php --noroot --testing
+ExecReload=/bin/kill -s SIGTERM $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,77 @@
+---
+- name: "copy config"
+  copy:
+    src: "{{ mbpaygw.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item }}/config/{{ mbpaygw.files.config }}"
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbpaygw.dirs.production }}"
+    - "{{ mbpaygw.dirs.testing }}"
+
+- name: "replace timezone"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{timezone}"
+    replace: "{{ timezone.stdout }}"
+  with_items:
+    - "{{ mbpaygw.dirs.production }}"
+    - "{{ mbpaygw.dirs.testing }}"
+
+- name: "replace main log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{log_main}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpaygw.files.log_main }}"
+  with_items:
+    - "{{ mbpaygw.dirs.production }}"
+    - "{{ mbpaygw.dirs.testing }}"
+
+- name: "replace debug log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{log_debug}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpaygw.files.log_debug }}"
+  with_items:
+    - "{{ mbpaygw.dirs.production }}"
+    - "{{ mbpaygw.dirs.testing }}"
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbpaygw.software.database.mysql_pass }}"
+  with_items:
+    - "{{ mbpaygw.dirs.production }}"
+    - "{{ mbpaygw.dirs.testing }}"
+  when: mbpaygw.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace mysql username"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{username}"
+    replace: "{{ mbpaygw.software.database.mysql_user }}"
+  with_items:
+    - "{{ mbpaygw.dirs.production }}"
+    - "{{ mbpaygw.dirs.testing }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ mbpaygw.dirs.production }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.database }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ mbpaygw.dirs.testing }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.testing }}"
+
+- name: "replace mysql host"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item }}/config/{{ mbpaygw.files.config }}"
+    regexp: "{server_host}"
+    replace: "{{ billing.mysql_server }}"
+  with_items:
+    - "{{ mbpaygw.dirs.production }}"
+    - "{{ mbpaygw.dirs.testing }}"

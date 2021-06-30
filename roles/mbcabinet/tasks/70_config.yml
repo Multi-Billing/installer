@@ -1,0 +1,77 @@
+---
+- name: "copy config"
+  copy:
+    src: "{{ mbcabinet.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/config/{{ mbcabinet.files.config }}"
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"
+
+- name: "replace timezone"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{timezone}"
+    replace: "{{ timezone.stdout }}"
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"
+
+- name: "replace main log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{log_main}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.files.log_main }}"
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"
+
+- name: "replace debug log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{log_debug}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.files.log_debug }}"
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbcabinet.software.database.mysql_pass }}"
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"
+  when: mbcabinet.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace mysql username"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{username}"
+    replace: "{{ mbcabinet.software.database.mysql_user }}"
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.database }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.testing }}"
+
+- name: "replace mysql host"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/config/{{ mbcabinet.files.config }}"
+    regexp: "{server_host}"
+    replace: "{{ billing.mysql_server }}"
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"

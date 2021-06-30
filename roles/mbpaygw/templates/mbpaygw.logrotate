@@ -1,0 +1,11 @@
+{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpaygw.dirs.module }}/*.log
+{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpaygw.dirs.module }}/*.debug
+{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpaygw.dirs.module }}/*.txt
+{
+    missingok
+	weekly
+	rotate 24
+	size 10M
+	compress
+	delaycompress
+}

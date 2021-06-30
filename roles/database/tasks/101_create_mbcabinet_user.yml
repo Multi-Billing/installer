@@ -1,0 +1,87 @@
+---
+# создание переменных для облегчения переноса на другие модули
+- name: "register variables"
+  set_fact:
+    module_name="{{ mbcabinet.dirs.module }}"
+    configuration="{{ mbcabinet.software.database }}"
+
+# создание переменных для удобства
+- name: "register mysql_user"
+  set_fact: mysql_user="{{ configuration.mysql_user }}"
+
+- name: "register mysql_role"
+  set_fact: mysql_role="{{ configuration.mysql_role }}"
+
+- name: "register custom_pass"
+  set_fact: custom_pass="{{ configuration.mysql_pass }}"
+
+- name: "register client_ip"
+  set_fact: client_ip="{{ configuration.client_ip }}"
+
+- name: "register client_ip"
+  set_fact: client_ip="{{ ansible_default_ipv4.address }}"
+  when: configuration.use_ansible_default_ipv4
+
+- name: "register client_ip"
+  set_fact: client_ip="127.0.0.1"
+  when: billing.mysql_server == "127.0.0.1" or billing.mysql_server == "localhost"
+
+# Начало
+- name: "check if username is already exists"
+  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -Ne "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE User = '{{ mysql_user }}' and Host = '{{ client_ip }}');"
+  register: user_exists
+
+- name: "create {{ mysql_user }} user"
+  block:
+    - name: "generate password"
+      shell: "bash roles/generatepasswd.sh > {{ billing.dirs.tmp }}/{{ module_name }}_password"
+
+    - name: "copy password into variable"
+      set_fact:
+        user_pass: "{{ lookup('file', '{{ billing.dirs.tmp }}/{{ module_name }}_password') }}"
+
+    - name: "copy password into variable"
+      set_fact:
+        user_pass: "{{ custom_pass }}"
+      when: custom_pass != ""
+
+    - name: "register PerconaDB/MySQL queues"
+      set_fact:
+        SQL_CREATE="CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED WITH mysql_native_password BY '{{ user_pass }}' REQUIRE NONE;"
+        SQL_RIGHTS="GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+        SQL_ROLE="SET DEFAULT ROLE '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+
+    - name: "detect version"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -Ne "SHOW VARIABLES LIKE 'version';"
+      register: dbms_version
+
+    - name: "register MariaDB queues"
+      set_fact:
+        SQL_CREATE="CREATE USER '{{ mysql_user }}'@'{{ client_ip }}' IDENTIFIED BY '{{ user_pass }}' REQUIRE NONE;"
+        SQL_RIGHTS="GRANT '{{ mysql_role }}' TO '{{ mysql_user }}'@'{{ client_ip }}';"
+        SQL_ROLE="SET DEFAULT ROLE '{{ mysql_role }}' FOR '{{ mysql_user }}'@'{{ client_ip }}';"
+      when: '"MariaDB" in dbms_version.stdout'
+
+    - name: "run queue"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_CREATE }}"
+
+    - name: "apply rights"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_RIGHTS }}"
+
+    - name: "default role"
+      shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "{{ SQL_ROLE }}"
+
+    - name: "add to {{ billing.dirs.home }}/database_users.info"
+      blockinfile:
+        path: "{{ billing.dirs.home }}/database_users.info"
+        block: |
+          ip={{ client_ip }}
+          login={{ mysql_user }}
+          password={{ user_pass }}
+        marker: "# {mark} {{ module_name }} database info"
+
+    - name: "mark completed"
+      file:
+        path: "{{ billing.dirs.tmp }}/{{ module_name }}_created"
+        state: touch
+  when: user_exists.stdout == "0"

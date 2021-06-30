@@ -5,10 +5,10 @@
   failed_when: false
   with_items:
     - "{{ mbadmin.software.database.mysql_role }}"
-    - "{{ mbkernel.software.database.mysql_role }}"
-    - "{{ mbpayments.software.database.mysql_role }}"
+    - "{{ mbcore.software.database.mysql_role }}"
+    - "{{ mbpaygw.software.database.mysql_role }}"
     - "{{ mbradius.software.database.mysql_role }}"
-    - "{{ mbstat.software.database.mysql_role }}"
-    - "{{ mbqueue.software.database.mysql_role }}"
-    - "{{ mbdbupdate.software.database.mysql_role }}"
+    - "{{ mbcabinet.software.database.mysql_role }}"
+    - "{{ mbcron.software.database.mysql_role }}"
+    - "{{ mbsql.software.database.mysql_role }}"
     - "{{ mbcabapi.software.database.mysql_role }}"

@@ -1,0 +1,50 @@
+---
+- name: "copy {{ mbcore.files.kernel }}"
+  copy:
+    src: "{{ mbcore.files.kernel }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbcore.files.kernel }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbcore.files.kernel }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbcore.files.kernel }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbcore.dirs.production }}"
+    - "{{ mbcore.dirs.testing }}"
+
+- name: "copy {{ mbcore.files.config }} files"
+  copy:
+    src: "{{ mbcore.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ item }}/{{ mbcore.dirs.config }}/{{ mbcore.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbcore.dirs.production }}"
+    - "{{ mbcore.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcore.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbcore.files.log_main }}"
+    - "{{ mbcore.files.log_debug }}"
+    - "{{ mbcore.files.log_update }}"
+
+- name: "setup updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ item.dst }}/{{ mbcore.dirs.updates }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rw,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbcore.files.updates }}", dst: "{{ mbcore.dirs.production }}" }
+    - { file: "{{ mbcore.files.testing }}", dst: "{{ mbcore.dirs.testing }}" }

@@ -1,9 +1,9 @@
 ---
-- include_tasks: mbkernel.yml
-  when: mbkernel is defined
+- include_tasks: mbcore.yml
+  when: mbcore is defined
 
 - include_tasks: mbadmin.yml
   when: mbadmin is defined
 
-- include_tasks: mbstat.yml
-  when: mbstat is defined
+- include_tasks: mbcabinet.yml
+  when: mbcabinet is defined

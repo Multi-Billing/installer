@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbsql.dirs.module }} {{ mbsql.dirs.production }}"
+  command: "/bin/bash {{ mbsql.files.updater }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ mbsql.dirs.production }}"
+  ignore_errors: yes
+
+- name: "update {{ mbsql.dirs.module }} {{ mbsql.dirs.testing }}"
+  command: "/bin/bash {{ mbsql.files.testing }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ mbsql.dirs.testing }}"
+  ignore_errors: yes

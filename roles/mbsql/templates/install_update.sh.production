@@ -1,0 +1,51 @@
+#!/bin/bash
+
+GREP=$(command -v grep)
+CAT=$(command -v cat)
+PHING=$(command -v phing)
+MYSQLBIN=$(command -v mysql)
+FILE_LOG="{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbsql.dirs.module }}/{{ mbsql.files.log_update }}"
+
+if [ -z "${PHING}" ]; then
+  echo "Please install phing. SQL update aborted "
+  exit
+fi
+
+CONFIG_FILE="config/config.xml"
+if [ -f "${CONFIG_FILE}" ]; then
+  CONFIG_DATA=$(${CAT} "${CONFIG_FILE}")
+
+  HOST=$(${GREP} -oPm1 "(?<=<host>)[^<]+" <<<"${CONFIG_DATA}")
+  USERNAME=$(${GREP} -oPm1 "(?<=<username>)[^<]+" <<<"${CONFIG_DATA}")
+  PASSWORD=$(${GREP} -oPm1 "(?<=<password>)[^<]+" <<<"${CONFIG_DATA}")
+  DBNAME=$(${GREP} -oPm1 "(?<=<dbname>)[^<]+" <<<"${CONFIG_DATA}")
+
+  if [ "${HOST}" == "" ]; then
+    HOST="localhost"
+  fi
+
+  BUILDPROP="./sqlupd/deploy/build.properties"
+  # clear build properties
+  echo > "${BUILDPROP}"
+  # generate new build properties
+  {
+    echo "build.dir=../"
+    echo ""
+    echo "db.host=${HOST}"
+    echo "db.user=${USERNAME}"
+    echo "db.pass=${PASSWORD}"
+    echo "db.name=${DBNAME}"
+    echo ""
+    echo "progs.mysql=${MYSQLBIN}"
+    echo ""
+  } >> "${BUILDPROP}"
+
+  # go to deploy
+  cd ./sqlupd/deploy || exit
+  # start deploy
+  $PHING >> "${FILE_LOG}"
+  # return
+  cd ../..
+  # clear build properties
+  echo > "${BUILDPROP}"
+fi

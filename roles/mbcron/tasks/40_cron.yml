@@ -1,0 +1,27 @@
+---
+- name: "register {{ mbcron.dirs.production }} path"
+  set_fact: module_path="{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}"
+
+- name: "add cron file"
+  template:
+    src: "mbcron_production.cron"
+    dest: "{{ OS.cron.dirs.custom }}/mbcron_production"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+
+- name: "register {{ mbcron.dirs.testing }} path"
+  set_fact: module_path="{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}"
+
+- name: "add cron file"
+  template:
+    src: "mbcron_testing.cron"
+    dest: "{{ OS.cron.dirs.custom }}/mbcron_testing"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+
+- name: "restart {{ OS.cron.name }} service"
+  service:
+    name: "{{ OS.cron.name }}"
+    state: restarted

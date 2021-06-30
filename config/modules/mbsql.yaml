@@ -1,0 +1,28 @@
+mbsql:
+  software:
+    database:
+      mysql_user: "mbsql"
+      mysql_role: "role_mbsql"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  dirs:
+    module: "mbsql"
+    production: "production"
+    testing: "testing"
+    config: "config"
+  files:
+    config: "config.xml"
+    archive: "mbsql.tar.gz"
+    updater: "mbsql_update.sh"
+    testing: "mbsql_testing.sh"
+    installer: "install_update.sh"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

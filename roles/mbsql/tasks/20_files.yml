@@ -1,0 +1,57 @@
+---
+- name: "copy {{ mbsql.files.archive }}"
+  copy:
+    src: "{{ mbsql.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbsql.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbsql.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbsql.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbsql.dirs.production }}"
+    - "{{ mbsql.dirs.testing }}"
+
+- name: "copy {{ mbsql.files.config }}"
+  copy:
+    src: "{{ mbsql.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ item }}/{{ mbsql.dirs.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbsql.dirs.production }}"
+    - "{{ mbsql.dirs.testing }}"
+
+- name: "create log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbsql.dirs.module }}/{{ mbsql.files.log_update }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+
+- name: "setup updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ item.path }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbsql.files.updater }}", path: "{{ mbsql.dirs.production }}" }
+    - { file: "{{ mbsql.files.testing }}", path: "{{ mbsql.dirs.testing }}" }
+
+- name: "setup installer"
+  template:
+    src: "{{ mbsql.files.installer }}.{{ item }}"
+    dest: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ item }}/{{ mbsql.files.installer }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbsql.dirs.production }}"
+    - "{{ mbsql.dirs.testing }}"

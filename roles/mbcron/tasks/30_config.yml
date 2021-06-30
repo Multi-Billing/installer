@@ -1,0 +1,42 @@
+---
+- name: "replace {{ mbcron.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.config }}/{{ mbcron.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbcron.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_main}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcron.dirs.module }}/{{ mbcron.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcron.dirs.module }}/{{ mbcron.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.config }}/{{ mbcron.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbcron.software.database.mysql_pass }}"
+  when: mbcron.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbcron.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/{{ mbcron.dirs.config }}/{{ mbcron.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbcron.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_main}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcron.dirs.module }}/{{ mbcron.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcron.dirs.module }}/{{ mbcron.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/{{ mbcrondirs.config }}/{{ mbcron.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbcron.software.database.mysql_pass }}"
+  when: mbcron.software.database.mysql_pass != ""
+  no_log: true

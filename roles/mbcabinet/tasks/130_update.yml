@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbcabinet.dirs.module }} {{ mbcabinet.dirs.production }}"
+  command: "/bin/bash {{ mbcabinet.files.update_backend }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/{{ mbcabinet.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbcabinet.dirs.module }} {{ mbcabinet.dirs.testing }}"
+  command: "/bin/bash {{ mbcabinet.files.testing_backend }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/{{ mbcabinet.dirs.updates }}"
+  ignore_errors: yes

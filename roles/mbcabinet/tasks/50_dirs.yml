@@ -1,0 +1,20 @@
+---
+- name: "create {{ mbcabinet.dirs.module }} directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbcabinet.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/config"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/public"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/{{ mbcabinet.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/config"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/public"
+    - "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/{{ mbcabinet.dirs.updates }}"

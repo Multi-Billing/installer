@@ -3,12 +3,12 @@
   include_vars: "config/modules/{{ item }}.yaml"
   with_items:
     - "mbadmin"
-    - "mbkernel"
-    - "mbpayments"
+    - "mbcore"
+    - "mbpaygw"
     - "mbradius"
-    - "mbstat"
-    - "mbqueue"
-    - "mbdbupdate"
+    - "mbcabinet"
+    - "mbcron"
+    - "mbsql"
     - "mbcabapi"
 
 - include_tasks: 10_create_files_and_folders.yml
@@ -35,20 +35,20 @@
     - include_tasks: 70_delete_users.yml
     - include_tasks: 80_create_roles.yml
     - include_tasks: 81_role_mbadmin_rights.yml
-    - include_tasks: 82_role_mbstat_rights.yml
-    - include_tasks: 83_role_mbkernel_rights.yml
+    - include_tasks: 82_role_mbcabinet_rights.yml
+    - include_tasks: 83_role_mbcore_rights.yml
     - include_tasks: 84_role_mbradius_rights.yml
-    - include_tasks: 85_role_mbpayments_rights.yml
-    - include_tasks: 86_role_mbqueue_rights.yml
-    - include_tasks: 87_role_mbdbupdate_rights.yml
+    - include_tasks: 85_role_mbpaygw_rights.yml
+    - include_tasks: 86_role_mbcron_rights.yml
+    - include_tasks: 87_role_mbsql_rights.yml
     - include_tasks: 88_role_mbcabapi_rights.yml
     - include_tasks: 100_create_mbadmin_user.yml
-    - include_tasks: 101_create_mbstat_user.yml
-    - include_tasks: 102_create_mbkernel_user.yml
+    - include_tasks: 101_create_mbcabinet_user.yml
+    - include_tasks: 102_create_mbcore_user.yml
     - include_tasks: 103_create_mbradius_user.yml
-    - include_tasks: 104_create_mbpayments_user.yml
-    - include_tasks: 105_create_mbqueue_user.yml
-    - include_tasks: 106_create_mbdbupdate_user.yml
+    - include_tasks: 104_create_mbpaygw_user.yml
+    - include_tasks: 105_create_mbcron_user.yml
+    - include_tasks: 106_create_mbsql_user.yml
     - include_tasks: 107_create_mbcabapi_user.yml
     - include_tasks: 110_change_mbadmin_password.yml
   when: mysql_connect.stat.exists

@@ -1,0 +1,6 @@
+---
+- name: "create system user for {{ mbcore.dirs.module }}"
+  user:
+    name: "{{ mbcore.system_user }}"
+    create_home : no
+    shell: /bin/nologin

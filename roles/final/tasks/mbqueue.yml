@@ -1,9 +1,0 @@
----
-- name: "check info to show"
-  stat:
-    path: "{{ billing.dirs.home }}/sql_mbqueue.info"
-  register: show_info
-
-- name: "show info"
-  debug: msg="{{ lookup('file', '{{ billing.dirs.home }}/sql_mbqueue.info').splitlines() }}"
-  when: show_info.stat.exists

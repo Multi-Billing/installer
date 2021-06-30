@@ -1,0 +1,35 @@
+---
+- name: "register {{ mbcabinet.dirs.production }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.chroot }}/{{ mbcabinet.dirs.production }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/public -> {{ chroot_dir }}{{ mbcabinet.dirs.www }}/{{ mbcabinet.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/public {{ chroot_dir }}{{ mbcabinet.dirs.www }}/{{ mbcabinet.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.production }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbcabinet.dirs.module }} {{ mbcabinet.dirs.production }}"
+
+- name: "register {{ mbcabinet.dirs.testing }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.chroot }}/{{ mbcabinet.dirs.testing }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/public -> {{ chroot_dir }}{{ mbcabinet.dirs.www }}/{{ mbcabinet.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/public {{ chroot_dir }}{{ mbcabinet.dirs.www }}/{{ mbcabinet.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.dirs.testing }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbcabinet.dirs.module }} {{ mbcabinet.dirs.testing }}"
+
+- name: "re-mount"
+  command: "mount -a"
+  args:
+    warn: no

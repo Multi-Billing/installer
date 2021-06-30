@@ -1,8 +1,0 @@
----
-- name: "add records"
-  blockinfile:
-    path: "{{ OS.hosts }}"
-    block: |
-      127.0.0.1 {{ mbpayments.software.nginx.subdomain.production }}.{{ billing.domain }}
-      127.0.0.1 {{ mbpayments.software.nginx.subdomain.testing }}.{{ billing.domain }}
-    marker: "# {mark} mbpayments DEFAULT RECORDS"

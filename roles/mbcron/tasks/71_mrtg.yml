@@ -1,0 +1,31 @@
+---
+- name: "create {{ OS.mrtg.dirs.conf }}"
+  file:
+    path: "{{ OS.mrtg.dirs.conf }}"
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rwx,g=rw,o=rw
+    state: directory
+
+- name: "create files"
+  file:
+    path: "{{ item }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ OS.mrtg.dirs.conf }}/{{ OS.mrtg.files.tarif }}"
+    - "{{ OS.mrtg.dirs.conf }}/{{ OS.mrtg.files.users }}"
+
+- name: "which php"
+  command: which php
+  register: php
+
+- name: "generate config"
+  command: "{{ php.stdout }} index.php config_mrtg_gen"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}"
+  register: config_mrtg_gen
+  failed_when: config_mrtg_gen.rc not in [0,255]
+  ignore_errors: yes

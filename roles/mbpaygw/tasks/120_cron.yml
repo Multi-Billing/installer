@@ -1,0 +1,13 @@
+---
+- name: "add cron file"
+  template:
+    src: "mbpaygw.cron"
+    dest: "{{ OS.cron.dirs.custom }}/mbpaygw"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+
+- name: "restart {{ OS.cron.name }} service"
+  service:
+    name: "{{ OS.cron.name }}"
+    state: restarted

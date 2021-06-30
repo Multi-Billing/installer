@@ -1,0 +1,31 @@
+mbcron:
+  software:
+    database:
+      mysql_user: "mbcron"
+      mysql_role: "role_mbcron"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  dirs:
+    module: "mbcron"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    archive: "mbcron.tar.gz"
+    updates: "mbcron_update.sh"
+    testing: "mbcron_testing.sh"
+    config: "config.xml"
+    log_main: "mbcron.log"
+    log_debug: "mbcron.debug"
+    log_update: "update.log"
+    scripts: ["5min.sh", "block.sh", "day.sh", "lastday.sh", "mrtg.sh", "mth.sh"]
+  requirements:
+    ram: 1864
+    cores: 2

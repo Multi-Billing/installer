@@ -1,0 +1,49 @@
+---
+- name: "copy {{ mbcabinet.dirs.module }} backend archive"
+  copy:
+    src: "{{ mbcabinet.files.archive_backend }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbcabinet.files.archive_backend }}"
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbcabinet.dirs.module }} backend archive"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbcabinet.files.archive_backend }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item }}/public/"
+  with_items:
+    - "{{ mbcabinet.dirs.production }}"
+    - "{{ mbcabinet.dirs.testing }}"
+
+- name: "create main log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.files.log_main }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create debug log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.files.log_debug }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create update log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabinet.dirs.module }}/{{ mbcabinet.files.log_update }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "add updater"
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item.path }}/{{ mbcabinet.dirs.updates }}/{{ item.file }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { file: "{{ mbcabinet.files.update_backend }}", path: "{{ mbcabinet.dirs.production }}" }
+    - { file: "{{ mbcabinet.files.testing_backend }}", path: "{{ mbcabinet.dirs.testing }}" }

@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbcron.dirs.module }} {{ mbcron.dirs.production }}"
+  command: "/bin/bash {{ mbcron.files.updates }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbcron.dirs.module }} {{ mbcron.dirs.testing }}"
+  command: "/bin/bash {{ mbcron.files.testing }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/{{ mbcron.dirs.updates }}"
+  ignore_errors: yes
