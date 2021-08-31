@@ -1,0 +1,21 @@
+---
+- include_tasks: 10_dirs.yml
+- include_tasks: 20_files.yml
+- include_tasks: 30_config.yml
+- include_tasks: 40_cron.yml
+- include_tasks: 50_logrotate.yml
+
+- name: "check {{ billing.mysql_connect }} exists"
+  stat:
+    path: "{{ billing.mysql_connect }}"
+  register: mysql_connect
+
+- include_tasks: 60_mysql_user_auto.yml
+  when: mysql_connect.stat.exists == True
+
+- include_tasks: 61_mysql_user_manual.yml
+  when: mysql_connect.stat.exists == False
+
+- include_tasks: 70_system_user.yml
+- include_tasks: "80_systemd_{{ ansible_os_family | lower }}{{ ansible_distribution_major_version }}.yml"
+- include_tasks: 90_update.yml

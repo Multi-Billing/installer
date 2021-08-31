@@ -45,7 +45,6 @@
    - disable_eval
    - ioncube
    - settings
-   - bill
    - database_connect
    - mbcron
    - final

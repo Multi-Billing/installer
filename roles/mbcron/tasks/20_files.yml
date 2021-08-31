@@ -38,17 +38,6 @@
     - "{{ mbcron.files.log_debug }}"
     - "{{ mbcron.files.log_update }}"
 
-- name: "setup updater"
-  template:
-    src: "{{ item.file }}"
-    dest: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ item.dst }}/{{ mbcron.dirs.updates }}/{{ item.file }}"
-    owner: root
-    group: root
-    mode: u=rw,g=rx,o=rx
-  with_items:
-    - { file: "{{ mbcron.files.updates }}", dst: "{{ mbcron.dirs.production }}" }
-    - { file: "{{ mbcron.files.testing }}", dst: "{{ mbcron.dirs.testing }}" }
-
 - name: "register {{ mbcron.dirs.production }} path"
   set_fact: module_path="{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}"
 
@@ -74,3 +63,14 @@
     mode: u=rwx,g=rx,o=rx
   with_items:
     - "{{ mbcron.files.scripts }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ item.path }}/{{ mbcron.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbcron.files.updates }}", path: "{{ mbcron.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbcron.files.testing }}", path: "{{ mbcron.dirs.testing }}" }

@@ -7,13 +7,12 @@
     owner: root
     group: root
   with_items:
-    - "{{ billing.dirs.home }}"
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbcore.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcore.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbcore.dirs.module }}"
-    - "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ mbcore.dirs.production }}"
     - "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ mbcore.dirs.production }}/{{ mbcore.dirs.config }}"
     - "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ mbcore.dirs.production }}/{{ mbcore.dirs.updates }}"
-    - "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ mbcore.dirs.testing }}"
     - "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ mbcore.dirs.testing }}/{{ mbcore.dirs.config }}"
     - "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ mbcore.dirs.testing }}/{{ mbcore.dirs.updates }}"

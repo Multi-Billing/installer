@@ -1,8 +1,8 @@
 ---
-- name: "add logrotate file"
+- name: "add {{ mbcore.dirs.module }} logrotate file"
   template:
-    src: "mbcore.logrotate"
-    dest: "{{ OS.logrotate }}/mbcore"
+    src: "module.logrotate"
+    dest: "{{ OS.logrotate }}/{{ mbcore.dirs.module }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx

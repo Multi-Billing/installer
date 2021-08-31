@@ -1,7 +1,7 @@
 ---
 - name: "add {{ mbpaygw.dirs.module }} logrotate file"
   template:
-    src: "{{ mbpaygw.dirs.module }}.logrotate"
+    src: "module.logrotate"
     dest: "{{ OS.logrotate }}/{{ mbpaygw.dirs.module }}"
     owner: root
     group: root

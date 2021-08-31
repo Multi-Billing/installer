@@ -19,7 +19,7 @@ mbsql:
   files:
     config: "config.xml"
     archive: "mbsql.tar.gz"
-    updater: "mbsql_update.sh"
+    updates: "mbsql_update.sh"
     testing: "mbsql_testing.sh"
     installer: "install_update.sh"
     log_update: "update.log"

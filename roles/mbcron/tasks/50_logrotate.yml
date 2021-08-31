@@ -1,8 +1,8 @@
 ---
-- name: "add logrotate file"
+- name: "add {{ mbcron.dirs.module }} logrotate file"
   template:
-    src: "mbcron.logrotate"
-    dest: "{{ OS.logrotate }}/mbcron"
+    src: "module.logrotate"
+    dest: "{{ OS.logrotate }}/{{ mbcron.dirs.module }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx

@@ -39,11 +39,11 @@
 
 - name: "add updater"
   template:
-    src: "{{ item.file }}"
-    dest: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item.path }}/{{ mbpaygw.dirs.updates }}/{{ item.file }}"
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ item.path }}/{{ mbpaygw.dirs.updates }}/{{ item.dest }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx
   with_items:
-    - { file: "{{ mbpaygw.files.update_backend }}", path: "{{ mbpaygw.dirs.production }}" }
-    - { file: "{{ mbpaygw.files.testing_backend }}", path: "{{ mbpaygw.dirs.testing }}" }
+    - { src: "update_production.sh", dest: "{{ mbpaygw.files.update_backend }}", path: "{{ mbpaygw.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbpaygw.files.testing_backend }}", path: "{{ mbpaygw.dirs.testing }}" }

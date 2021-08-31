@@ -1,0 +1,17 @@
+---
+- name: "create {{ mbfinance.dirs.module }} catalogs"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbfinance.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbfinance.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbfinance.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbfinance.dirs.module }}/{{ mbfinance.dirs.production }}/{{ mbfinance.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbfinance.dirs.module }}/{{ mbfinance.dirs.production }}/{{ mbfinance.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbfinance.dirs.module }}/{{ mbfinance.dirs.testing }}/{{ mbfinance.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbfinance.dirs.module }}/{{ mbfinance.dirs.testing }}/{{ mbfinance.dirs.updates }}"

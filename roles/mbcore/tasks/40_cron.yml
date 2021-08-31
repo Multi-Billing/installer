@@ -1,8 +1,8 @@
 ---
-- name: "add cron file"
+- name: "add {{ mbcore.dirs.module }} cron file"
   template:
-    src: "mbcore.cron"
-    dest: "{{ OS.cron.dirs.custom }}/mbcore"
+    src: "module.cron"
+    dest: "{{ OS.cron.dirs.custom }}/{{ mbcore.dirs.module }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx

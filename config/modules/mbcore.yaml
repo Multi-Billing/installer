@@ -28,11 +28,10 @@ mbcore:
     testing: "testing"
     updates: "updates"
   files:
+    event_scripts: [ "mb_event_port_restart" ]
     systemd_production_service: "mbcore.service"
     systemd_testing_service: "mbcore_testing.service"
-    pid_file: ""
-    pid_testing_file: ""
-    kernel: "mbcore.tar.gz"
+    archive: "mbcore.tar.gz"
     updates: "mbcore_update.sh"
     testing: "mbcore_testing.sh"
     config: "config.xml"

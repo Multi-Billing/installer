@@ -1,15 +1,15 @@
 ---
-- name: "copy {{ mbcore.files.kernel }}"
+- name: "copy {{ mbcore.files.archive }}"
   copy:
-    src: "{{ mbcore.files.kernel }}"
-    dest: "{{ billing.dirs.tmp }}/{{ mbcore.files.kernel }}"
+    src: "{{ mbcore.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbcore.files.archive }}"
     owner: root
     group: root
     mode: u=rw,g=r,o=r
 
-- name: "unpack {{ mbcore.files.kernel }}"
+- name: "unpack {{ mbcore.files.archive }}"
   unarchive:
-    src: "{{ billing.dirs.tmp }}/{{ mbcore.files.kernel }}"
+    src: "{{ billing.dirs.tmp }}/{{ mbcore.files.archive }}"
     dest: "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ item }}"
   with_items:
     - "{{ mbcore.dirs.production }}"
@@ -38,13 +38,13 @@
     - "{{ mbcore.files.log_debug }}"
     - "{{ mbcore.files.log_update }}"
 
-- name: "setup updater"
+- name: "add updater"
   template:
-    src: "{{ item.file }}"
-    dest: "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ item.dst }}/{{ mbcore.dirs.updates }}/{{ item.file }}"
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcore.dirs.module }}/{{ item.path }}/{{ mbcore.dirs.updates }}/{{ item.dest }}"
     owner: root
     group: root
-    mode: u=rw,g=rx,o=rx
+    mode: u=rwx,g=rx,o=rx
   with_items:
-    - { file: "{{ mbcore.files.updates }}", dst: "{{ mbcore.dirs.production }}" }
-    - { file: "{{ mbcore.files.testing }}", dst: "{{ mbcore.dirs.testing }}" }
+    - { src: "update_production.sh", dest: "{{ mbcore.files.updates }}", path: "{{ mbcore.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbcore.files.testing }}", path: "{{ mbcore.dirs.testing }}" }

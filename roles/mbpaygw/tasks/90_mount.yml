@@ -12,6 +12,8 @@
       {{ billing.dirs.home }}/{{ mbpaygw.dirs.module }}/{{ mbpaygw.dirs.production }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
       # logs
       {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbpaygw.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+      # event scripts
+      {{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbpaygw.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.scripts }} none defaults,bind 0 0
     marker: "# {mark} {{ mbpaygw.dirs.module }} {{ mbpaygw.dirs.production }}"
 
 - name: "register {{ mbpaygw.dirs.testing }} chroot dir"

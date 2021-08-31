@@ -7,10 +7,8 @@
     owner: root
     group: root
   with_items:
-    - "{{ billing.dirs.home }}"
     - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbsql.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbsql.dirs.module }}"
-    - "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ mbsql.dirs.production }}"
     - "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ mbsql.dirs.production }}/{{ mbsql.dirs.config }}"
     - "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ mbsql.dirs.testing }}"

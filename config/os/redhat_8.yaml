@@ -111,7 +111,7 @@ OS:
   hosts: /etc/hosts
   sysctl: /etc/sysctl.conf
   sudo: /etc/sudoers.d
-  logrotate: /etc/logrotate.d/
+  logrotate: /etc/logrotate.d
   service: /sbin/service
   systemctl: /bin/systemctl
   systemd: /usr/lib/systemd/system

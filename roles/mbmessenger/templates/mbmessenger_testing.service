@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing testing mbmessenger
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbmessenger.system_user }}
+RuntimeDirectory={{ mbmessenger.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbmessenger.params.testing.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ mbmessenger.dirs.testing }}/mbmessenger.php --testing
+ExecReload=/bin/kill -s SIGTERM $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

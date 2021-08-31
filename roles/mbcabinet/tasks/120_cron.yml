@@ -1,8 +1,8 @@
 ---
 - name: "add cron file"
   template:
-    src: "mbcabinet.cron"
-    dest: "{{ OS.cron.dirs.custom }}/mbcabinet"
+    src: "module.cron"
+    dest: "{{ OS.cron.dirs.custom }}/{{ mbcabinet.dirs.module }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx

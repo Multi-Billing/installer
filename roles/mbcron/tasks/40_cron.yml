@@ -2,10 +2,10 @@
 - name: "register {{ mbcron.dirs.production }} path"
   set_fact: module_path="{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}"
 
-- name: "add cron file"
+- name: "add {{ mbcron.dirs.testing }}_production cron file"
   template:
-    src: "mbcron_production.cron"
-    dest: "{{ OS.cron.dirs.custom }}/mbcron_production"
+    src: "module_production.cron"
+    dest: "{{ OS.cron.dirs.custom }}/{{ mbcron.dirs.module }}_production"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx
@@ -13,10 +13,10 @@
 - name: "register {{ mbcron.dirs.testing }} path"
   set_fact: module_path="{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}"
 
-- name: "add cron file"
+- name: "add {{ mbcron.dirs.testing }}_testing cron file"
   template:
-    src: "mbcron_testing.cron"
-    dest: "{{ OS.cron.dirs.custom }}/mbcron_testing"
+    src: "module_testing.cron"
+    dest: "{{ OS.cron.dirs.custom }}/{{ mbcron.dirs.module }}_testing"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx

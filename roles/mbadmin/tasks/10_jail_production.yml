@@ -31,6 +31,7 @@
     - "{{ chroot_dir }}{{ OS.fpm.dirs.save_path }}"
     - "{{ chroot_dir }}{{ billing.dirs.home }}/config"
     - "{{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }}"
+    - "{{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.scripts }}"
     - "{{ chroot_dir }}{{ mbadmin.dirs.www }}/{{ mbadmin.dirs.module }}"
 
 - name: "create soft links"

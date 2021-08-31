@@ -12,6 +12,8 @@
       {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
       # logs
       {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbadmin.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+      # event scripts
+      {{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbadmin.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.scripts }} none defaults,bind 0 0
     marker: "# {mark} {{ mbadmin.dirs.module }} {{ mbadmin.dirs.production }}"
 
 - name: "register {{ mbadmin.dirs.testing }} chroot dir"

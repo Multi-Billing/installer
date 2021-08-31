@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing mbnotify
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbnotify.system_user }}
+RuntimeDirectory={{ mbnotify.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbnotify.params.production.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbnotify.dirs.module }}/{{ mbnotify.dirs.production }}/mbnotify.php
+ExecReload=/bin/kill -s SIGHUP $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

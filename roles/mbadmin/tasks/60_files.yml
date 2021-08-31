@@ -53,16 +53,16 @@
 
 - name: "add updater"
   template:
-    src: "{{ item.file }}"
-    dest: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item.path }}/{{ mbadmin.dirs.updates }}/{{ item.file }}"
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ item.path }}/{{ mbadmin.dirs.updates }}/{{ item.dest }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx
   with_items:
-    - { file: "{{ mbadmin.files.update_backend }}", path: "{{ mbadmin.dirs.production }}" }
-    - { file: "{{ mbadmin.files.update_frontend }}", path: "{{ mbadmin.dirs.production }}" }
-    - { file: "{{ mbadmin.files.testing_backend }}", path: "{{ mbadmin.dirs.testing }}" }
-    - { file: "{{ mbadmin.files.testing_frontend }}", path: "{{ mbadmin.dirs.testing }}" }
+    - { src: "backend_update.sh", dest: "{{ mbadmin.files.update_backend }}", path: "{{ mbadmin.dirs.production }}" }
+    - { src: "frontend_update.sh", dest: "{{ mbadmin.files.update_frontend }}", path: "{{ mbadmin.dirs.production }}" }
+    - { src: "backend_testing.sh", dest: "{{ mbadmin.files.testing_backend }}", path: "{{ mbadmin.dirs.testing }}" }
+    - { src: "frontend_testing.sh", dest: "{{ mbadmin.files.testing_frontend }}", path: "{{ mbadmin.dirs.testing }}" }
 
 - name: "create mrtg files"
   file:
@@ -75,3 +75,14 @@
     - "mrtg.cfg"
     - "{{ OS.mrtg.files.users }}"
     - "{{ OS.mrtg.files.tarif }}"
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbadmin.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbadmin.files.event_scripts }}"
+    - "{{ mbadmin.files.dashboard_scripts }}"

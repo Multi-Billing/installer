@@ -1,0 +1,17 @@
+---
+- name: "create {{ mbmessenger.dirs.module }} catalogs"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbmessenger.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbmessenger.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbmessenger.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ mbmessenger.dirs.production }}/{{ mbmessenger.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ mbmessenger.dirs.production }}/{{ mbmessenger.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ mbmessenger.dirs.testing }}/{{ mbmessenger.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ mbmessenger.dirs.testing }}/{{ mbmessenger.dirs.updates }}"

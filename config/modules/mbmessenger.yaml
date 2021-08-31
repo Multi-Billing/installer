@@ -1,0 +1,42 @@
+mbmessenger:
+  system_user: "mbmessenger"
+  software:
+    database:
+      mysql_user: "mbmessenger"
+      mysql_role: "role_mbmessenger"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22020"
+      pid: "/var/run/mbmessenger/mbmessenger_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22021"
+      pid: "/var/run/mbmessenger/mbmessenger_testing.pid"
+  dirs:
+    module: "mbmessenger"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    systemd_production_service: "mbmessenger.service"
+    systemd_testing_service: "mbmessenger_testing.service"
+    archive: "mbmessenger.tar.gz"
+    updates: "mbmessenger_update.sh"
+    testing: "mbmessenger_testing.sh"
+    config: "config.xml"
+    log_main: "mbmessenger.log"
+    log_debug: "mbmessenger.debug"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

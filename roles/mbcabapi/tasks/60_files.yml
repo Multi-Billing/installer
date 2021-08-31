@@ -39,11 +39,11 @@
 
 - name: "add updater"
   template:
-    src: "{{ item.file }}"
-    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item.path }}/{{ mbcabapi.dirs.updates }}/{{ item.file }}"
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ item.path }}/{{ mbcabapi.dirs.updates }}/{{ item.dest }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx
   with_items:
-    - { file: "{{ mbcabapi.files.update_backend }}", path: "{{ mbcabapi.dirs.production }}" }
-    - { file: "{{ mbcabapi.files.testing_backend }}", path: "{{ mbcabapi.dirs.testing }}" }
+    - { src: "update_production.sh", dest: "{{ mbcabapi.files.update_backend }}", path: "{{ mbcabapi.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbcabapi.files.testing_backend }}", path: "{{ mbcabapi.dirs.testing }}" }

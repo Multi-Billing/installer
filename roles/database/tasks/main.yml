@@ -10,6 +10,12 @@
     - "mbcron"
     - "mbsql"
     - "mbcabapi"
+    - "mbqueue"
+    - "mbnotify"
+    - "mbfinance"
+    - "mbmessenger"
+    - "mbtvdaemon"
+    - "mbworkerbot"
 
 - include_tasks: 10_create_files_and_folders.yml
 
@@ -42,16 +48,28 @@
     - include_tasks: 86_role_mbcron_rights.yml
     - include_tasks: 87_role_mbsql_rights.yml
     - include_tasks: 88_role_mbcabapi_rights.yml
-    - include_tasks: 100_create_mbadmin_user.yml
-    - include_tasks: 101_create_mbcabinet_user.yml
-    - include_tasks: 102_create_mbcore_user.yml
-    - include_tasks: 103_create_mbradius_user.yml
-    - include_tasks: 104_create_mbpaygw_user.yml
-    - include_tasks: 105_create_mbcron_user.yml
-    - include_tasks: 106_create_mbsql_user.yml
-    - include_tasks: 107_create_mbcabapi_user.yml
-    - include_tasks: 110_change_mbadmin_password.yml
+    - include_tasks: 89_role_mbqueue_rights.yml
+    - include_tasks: 90_role_mbnotify_rights.yml
+    - include_tasks: 91_role_mbtvdaemon_rights.yml
+    - include_tasks: 92_role_mbworkerbot_rights.yml
+    - include_tasks: 93_role_mbfinance_rights.yml
+    - include_tasks: 94_role_mbmessenger_rights.yml
+    - include_tasks: 200_create_mbadmin_user.yml
+    - include_tasks: 201_create_mbcabinet_user.yml
+    - include_tasks: 202_create_mbcore_user.yml
+    - include_tasks: 203_create_mbradius_user.yml
+    - include_tasks: 204_create_mbpaygw_user.yml
+    - include_tasks: 205_create_mbcron_user.yml
+    - include_tasks: 206_create_mbsql_user.yml
+    - include_tasks: 207_create_mbcabapi_user.yml
+    - include_tasks: 208_create_mbqueue_user.yml
+    - include_tasks: 209_create_mbnotify_user.yml
+    - include_tasks: 210_create_mbtvdaemon_user.yml
+    - include_tasks: 211_create_mbworkerbot_user.yml
+    - include_tasks: 212_create_mbfinance_user.yml
+    - include_tasks: 213_create_mbmessenger_user.yml
+    - include_tasks: 300_change_mbadmin_password.yml
   when: mysql_connect.stat.exists
 
-- include_tasks: 120_systemd.yml
+- include_tasks: 310_systemd.yml
   when: billing.install_percona

@@ -1,0 +1,48 @@
+---
+- name: "replace {{ mbtvdaemon.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.dirs.production }}/{{ mbtvdaemon.dirs.config }}/{{ mbtvdaemon.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbtvdaemon.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbtvdaemon_pid}', value: "{{ mbtvdaemon.params.production.pid }}" }
+    - { name: '{mbtvdaemon_ip}', value: "{{ mbtvdaemon.params.production.ip }}" }
+    - { name: '{mbtvdaemon_port}', value: "{{ mbtvdaemon.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.dirs.production }}/{{ mbtvdaemon.dirs.config }}/{{ mbtvdaemon.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbtvdaemon.software.database.mysql_pass }}"
+  when: mbtvdaemon.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbtvdaemon.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.dirs.testing }}/{{ mbtvdaemon.dirs.config }}/{{ mbtvdaemon.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbtvdaemon.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbtvdaemon_pid}', value: "{{ mbtvdaemon.params.testing.pid }}" }
+    - { name: '{mbtvdaemon_ip}', value: "{{ mbtvdaemon.params.production.ip }}" }
+    - { name: '{mbtvdaemon_port}', value: "{{ mbtvdaemon.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbtvdaemon.dirs.module }}/{{ mbtvdaemon.dirs.testing }}/{{ mbtvdaemon.dirs.config }}/{{ mbtvdaemon.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbtvdaemon.software.database.mysql_pass }}"
+  when: mbtvdaemon.software.database.mysql_pass != ""
+  no_log: true

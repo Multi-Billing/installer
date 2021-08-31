@@ -39,11 +39,11 @@
 
 - name: "add updater"
   template:
-    src: "{{ item.file }}"
-    dest: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item.path }}/{{ mbcabinet.dirs.updates }}/{{ item.file }}"
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbcabinet.dirs.module }}/{{ item.path }}/{{ mbcabinet.dirs.updates }}/{{ item.dest }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx
   with_items:
-    - { file: "{{ mbcabinet.files.update_backend }}", path: "{{ mbcabinet.dirs.production }}" }
-    - { file: "{{ mbcabinet.files.testing_backend }}", path: "{{ mbcabinet.dirs.testing }}" }
+    - { src: "update_production.sh", dest: "{{ mbcabinet.files.update_backend }}", path: "{{ mbcabinet.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbcabinet.files.testing_backend }}", path: "{{ mbcabinet.dirs.testing }}" }

@@ -7,15 +7,14 @@
     owner: root
     group: root
   with_items:
-    - "{{ billing.dirs.home }}"
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/mrtg"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbcron.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcron.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbcron.dirs.module }}"
-    - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}"
-    - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}"
     - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts"
     - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.config }}"
     - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.updates }}"
-    - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}"
     - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/scripts"
     - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/{{ mbcron.dirs.config }}"
     - "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/{{ mbcron.dirs.updates }}"

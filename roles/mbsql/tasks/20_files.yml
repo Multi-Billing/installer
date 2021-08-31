@@ -34,16 +34,16 @@
     group: root
     mode: u=rw,g=rw,o=rw
 
-- name: "setup updater"
+- name: "add updater"
   template:
-    src: "{{ item.file }}"
-    dest: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ item.path }}/{{ item.file }}"
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ item.path }}/{{ item.dest }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx
   with_items:
-    - { file: "{{ mbsql.files.updater }}", path: "{{ mbsql.dirs.production }}" }
-    - { file: "{{ mbsql.files.testing }}", path: "{{ mbsql.dirs.testing }}" }
+    - { src: "update_production.sh", dest: "{{ mbsql.files.updates }}", path: "{{ mbsql.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbsql.files.testing }}", path: "{{ mbsql.dirs.testing }}" }
 
 - name: "setup installer"
   template:

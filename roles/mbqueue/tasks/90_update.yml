@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbqueue.dirs.module }} {{ mbqueue.dirs.production }}"
+  command: "/bin/bash {{ mbqueue.files.updates }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbqueue.dirs.module }}/{{ mbqueue.dirs.production }}/{{ mbqueue.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbqueue.dirs.module }} {{ mbqueue.dirs.testing }}"
+  command: "/bin/bash {{ mbqueue.files.testing }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbqueue.dirs.module }}/{{ mbqueue.dirs.testing }}/{{ mbqueue.dirs.updates }}"
+  ignore_errors: yes

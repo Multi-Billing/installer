@@ -1,7 +1,7 @@
 ---
 - name: "add {{ mbadmin.dirs.module }} logrotate file"
   template:
-    src: "{{ mbadmin.dirs.module }}.logrotate"
+    src: "module.logrotate"
     dest: "{{ OS.logrotate }}/{{ mbadmin.dirs.module }}"
     owner: root
     group: root

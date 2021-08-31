@@ -27,5 +27,5 @@ mbcron:
     log_update: "update.log"
     scripts: ["5min.sh", "block.sh", "day.sh", "lastday.sh", "mrtg.sh", "mth.sh"]
   requirements:
-    ram: 1864
-    cores: 2
+    ram: 512
+    cores: 1

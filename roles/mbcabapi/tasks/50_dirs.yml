@@ -7,14 +7,14 @@
     owner: root
     group: root
   with_items:
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/mrtg"
     - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbcabapi.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbcabapi.dirs.module }}"
     - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbcabapi.dirs.module }}"
-    - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}"
-    - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}"
     - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/config"
     - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/public"
     - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/{{ mbcabapi.dirs.updates }}"
-    - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}"
     - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}/config"
     - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}/public"
     - "{{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.testing }}/{{ mbcabapi.dirs.updates }}"

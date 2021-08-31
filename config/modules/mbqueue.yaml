@@ -1,0 +1,42 @@
+mbqueue:
+  system_user: "mbqueue"
+  software:
+    database:
+      mysql_user: "mbqueue"
+      mysql_role: "role_mbqueue"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22040"
+      pid: "/var/run/mbqueue/mbqueue_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22041"
+      pid: "/var/run/mbqueue/mbqueue_testing.pid"
+  dirs:
+    module: "mbqueue"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    systemd_production_service: "mbqueue.service"
+    systemd_testing_service: "mbqueue_testing.service"
+    archive: "mbqueue.tar.gz"
+    updates: "mbqueue_update.sh"
+    testing: "mbqueue_testing.sh"
+    config: "config.xml"
+    log_main: "mbqueue.log"
+    log_debug: "mbqueue.debug"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

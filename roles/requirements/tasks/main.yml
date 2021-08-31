@@ -1,9 +1,48 @@
 ---
-- include_tasks: mbcore.yml
-  when: mbcore is defined
+- include_tasks: full_install.yml
+  when: full_install is defined
 
-- include_tasks: mbadmin.yml
-  when: mbadmin is defined
+- name: "module install"
+  block:
+    - include_tasks: mbadmin.yml
+      when: mbadmin is defined
 
-- include_tasks: mbcabinet.yml
-  when: mbcabinet is defined
+    - include_tasks: mbcabapi.yml
+      when: mbcabapi is defined
+
+    - include_tasks: mbcabinet.yml
+      when: mbcabinet is defined
+
+    - include_tasks: mbcore.yml
+      when: mbcore is defined
+
+    - include_tasks: mbcron.yml
+      when: mbcron is defined
+
+    - include_tasks: mbfinance.yml
+      when: mbfinance is defined
+
+    - include_tasks: mbmessenger.yml
+      when: mbmessenger is defined
+
+    - include_tasks: mbnotify.yml
+      when: mbnotify is defined
+
+    - include_tasks: mbpaygw.yml
+      when: mbpaygw is defined
+
+    - include_tasks: mbqueue.yml
+      when: mbqueue is defined
+
+    - include_tasks: mbradius.yml
+      when: mbradius is defined
+
+    - include_tasks: mbsql.yml
+      when: mbsql is defined
+
+    - include_tasks: mbtvdaemon.yml
+      when: mbtvdaemon is defined
+
+    - include_tasks: mbworkerbot.yml
+      when: mbworkerbot is defined
+  when: full_install is not defined

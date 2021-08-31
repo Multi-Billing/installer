@@ -13,8 +13,8 @@ mysql:
   # название тест базы
   testing: "bill_test"
   # кодировка базы данных
-  encoding: "koi8r"
-  collation: "koi8r_general_ci"
+  encoding: "utf8mb4"
+  collation: "utf8mb4_general_ci"
   # восстановить базу из бекапа
   # пример:
   # backup_file: "/home/database-2020-12-01.sql"

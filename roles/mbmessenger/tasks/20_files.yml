@@ -1,0 +1,50 @@
+---
+- name: "copy {{ mbmessenger.files.archive }}"
+  copy:
+    src: "{{ mbmessenger.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbmessenger.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbmessenger.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbmessenger.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbmessenger.dirs.production }}"
+    - "{{ mbmessenger.dirs.testing }}"
+
+- name: "copy {{ mbmessenger.files.config }} files"
+  copy:
+    src: "{{ mbmessenger.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ item }}/{{ mbmessenger.dirs.config }}/{{ mbmessenger.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbmessenger.dirs.production }}"
+    - "{{ mbmessenger.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbmessenger.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbmessenger.files.log_main }}"
+    - "{{ mbmessenger.files.log_debug }}"
+    - "{{ mbmessenger.files.log_update }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbmessenger.dirs.module }}/{{ item.path }}/{{ mbmessenger.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbmessenger.files.updates }}", path: "{{ mbmessenger.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbmessenger.files.testing }}", path: "{{ mbmessenger.dirs.testing }}" }

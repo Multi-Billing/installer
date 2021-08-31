@@ -1,8 +1,8 @@
 ---
 - name: "add cron file"
   template:
-    src: "mbcabapi.cron"
-    dest: "{{ OS.cron.dirs.custom }}/mbcabapi"
+    src: "module.cron"
+    dest: "{{ OS.cron.dirs.custom }}/{{ mbcabapi.dirs.module }}"
     owner: root
     group: root
     mode: u=rwx,g=rx,o=rx

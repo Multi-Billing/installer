@@ -1,0 +1,17 @@
+---
+- name: "create {{ mbworkerbot.dirs.module }} catalogs"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbworkerbot.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbworkerbot.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbworkerbot.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbworkerbot.dirs.module }}/{{ mbworkerbot.dirs.production }}/{{ mbworkerbot.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbworkerbot.dirs.module }}/{{ mbworkerbot.dirs.production }}/{{ mbworkerbot.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbworkerbot.dirs.module }}/{{ mbworkerbot.dirs.testing }}/{{ mbworkerbot.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbworkerbot.dirs.module }}/{{ mbworkerbot.dirs.testing }}/{{ mbworkerbot.dirs.updates }}"

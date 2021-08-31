@@ -45,5 +45,5 @@ mbpaygw:
     log_debug: "mbpaygw.debug"
     log_update: "update.log"
   requirements:
-    ram: 1864
-    cores: 2
+    ram: 512
+    cores: 1

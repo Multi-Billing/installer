@@ -1,0 +1,11 @@
+{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbworkerbot.dirs.module }}/*.log
+{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbworkerbot.dirs.module }}/*.txt
+{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbworkerbot.dirs.module }}/*.debug
+{
+    missingok
+	weekly
+	rotate 24
+	size 10M
+	compress
+	delaycompress
+}

@@ -47,7 +47,6 @@
    - ioncube
    - settings
    - nginx
-   - bill
    - database_connect
    - mbcabapi
    - final

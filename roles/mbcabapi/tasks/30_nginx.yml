@@ -1,12 +1,12 @@
 ---
 - name: "create {{ mbcabapi.dirs.module }} hosts"
   template:
-    src: "{{ item }}"
-    dest: "{{ OS.nginx.dirs.conf }}/conf.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ OS.nginx.dirs.conf }}/conf.d/{{ item.dest }}"
     mode: u=rw,g=r,o=r
   with_items:
-    - "mbcabapi_vhost_production.conf"
-    - "mbcabapi_vhost_testing.conf"
+    - { src: "nginx_production.conf", dest: "mbcabapi_vhost_production.conf" }
+    - { src: "nginx_testing.conf", dest: "mbcabapi_vhost_testing.conf" }
 
 - name: "restart {{ OS.nginx.name }} service"
   service:

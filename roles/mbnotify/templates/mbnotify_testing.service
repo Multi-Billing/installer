@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing testing mbnotify
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbnotify.system_user }}
+RuntimeDirectory={{ mbnotify.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbnotify.params.testing.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbnotify.dirs.module }}/{{ mbnotify.dirs.testing }}/mbnotify.php --testing
+ExecReload=/bin/kill -s SIGTERM $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

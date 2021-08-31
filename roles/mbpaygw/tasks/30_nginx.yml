@@ -1,12 +1,12 @@
 ---
 - name: "create {{ mbpaygw.dirs.module }} hosts"
   template:
-    src: "{{ item }}"
-    dest: "{{ OS.nginx.dirs.conf }}/conf.d/{{ item }}"
+    src: "{{ item.src }}"
+    dest: "{{ OS.nginx.dirs.conf }}/conf.d/{{ item.dest }}"
     mode: u=rw,g=r,o=r
   with_items:
-    - "mbpaygw_vhost_production.conf"
-    - "mbpaygw_vhost_testing.conf"
+    - { src: "nginx_production.conf", dest: "mbpaygw_vhost_production.conf" }
+    - { src: "nginx_testing.conf", dest: "mbpaygw_vhost_testing.conf" }
 
 - name: "restart {{ OS.nginx.name }} service"
   service:

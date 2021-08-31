@@ -1,0 +1,44 @@
+---
+- name: "replace {{ mbqueue.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbqueue.dirs.module }}/{{ mbqueue.dirs.production }}/{{ mbqueue.dirs.config }}/{{ mbqueue.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbqueue.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbqueue.dirs.module }}/{{ mbqueue.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbqueue.dirs.module }}/{{ mbqueue.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbqueue_pid}', value: "{{ mbqueue.params.production.pid }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbqueue.dirs.module }}/{{ mbqueue.dirs.production }}/{{ mbqueue.dirs.config }}/{{ mbqueue.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbqueue.software.database.mysql_pass }}"
+  when: mbqueue.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbqueue.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbqueue.dirs.module }}/{{ mbqueue.dirs.testing }}/{{ mbqueue.dirs.config }}/{{ mbqueue.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbqueue.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbqueue.dirs.module }}/{{ mbqueue.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbqueue.dirs.module }}/{{ mbqueue.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{kernel_pid}', value: "{{ mbqueue.params.testing.pid }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbqueue.dirs.module }}/{{ mbqueue.dirs.testing }}/{{ mbqueue.dirs.config }}/{{ mbqueue.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbqueue.software.database.mysql_pass }}"
+  when: mbqueue.software.database.mysql_pass != ""
+  no_log: true

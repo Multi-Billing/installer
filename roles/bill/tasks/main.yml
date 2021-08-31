@@ -1,3 +1,0 @@
----
-- include_tasks: 10_dirs.yml
-#- include_tasks: 20_scripts.yml
