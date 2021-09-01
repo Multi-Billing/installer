@@ -67,7 +67,6 @@
     - settings
     - database
     - nginx
-    - bill
     - mbsql
     - mbcore
     - mbradius
@@ -75,10 +74,4 @@
     - mbcron
     - mbpaygw
     - mbcabinet
-    - mbcabapi
-    - mbqueue
-    - mbfinance
-    - mbmessenger
-    - mbtvdaemon
-    - mbworkerbot
     - final
