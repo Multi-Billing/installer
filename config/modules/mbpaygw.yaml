@@ -29,7 +29,6 @@ mbpaygw:
         pool_file: "mbpaygw_testing.conf"
         socket: "/var/run/php-fpm_mbpaygw_testing.sock"
   dirs:
-    event_scripts: [ "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_restart", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
     module: "mbpaygw"
     chroot: "chroot"
     www: "/var/www"
@@ -38,6 +37,7 @@ mbpaygw:
     testing: "testing"
     updates: "updates"
   files:
+    event_scripts: [ "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_restart", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
     archive_backend: "mbpaygw.tar.gz"
     update_backend: "mbpaygw_update.sh"
     testing_backend: "mbpaygw_testing.sh"
