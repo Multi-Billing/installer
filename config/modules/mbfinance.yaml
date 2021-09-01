@@ -28,6 +28,7 @@ mbfinance:
     testing: "testing"
     updates: "updates"
   files:
+    event_scripts: [ "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_restart", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
     systemd_production_service: "mbfinance.service"
     systemd_testing_service: "mbfinance_testing.service"
     archive: "mbfinance.tar.gz"

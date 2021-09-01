@@ -28,6 +28,7 @@ mbtvdaemon:
     testing: "testing"
     updates: "updates"
   files:
+    event_scripts: [ "mb_event_device_add", "mb_event_device_del", "mb_event_iptv_add", "mb_event_iptv_del", "mb_event_iptv_disable", "mb_event_iptv_enable" ]
     systemd_production_service: "mbtvdaemon.service"
     systemd_testing_service: "mbtvdaemon_testing.service"
     archive: "mbtvdaemon.tar.gz"

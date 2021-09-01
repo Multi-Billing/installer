@@ -47,3 +47,13 @@
   with_items:
     - { src: "update_production.sh", dest: "{{ mbcabapi.files.update_backend }}", path: "{{ mbcabapi.dirs.production }}" }
     - { src: "update_testing.sh", dest: "{{ mbcabapi.files.testing_backend }}", path: "{{ mbcabapi.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbcabapi.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbcabapi.files.event_scripts }}"

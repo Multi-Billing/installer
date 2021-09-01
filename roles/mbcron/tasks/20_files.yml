@@ -74,3 +74,13 @@
   with_items:
     - { src: "update_production.sh", dest: "{{ mbcron.files.updates }}", path: "{{ mbcron.dirs.production }}" }
     - { src: "update_testing.sh", dest: "{{ mbcron.files.testing }}", path: "{{ mbcron.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbcron.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbcron.files.event_scripts }}"

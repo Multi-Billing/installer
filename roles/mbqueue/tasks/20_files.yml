@@ -48,3 +48,13 @@
   with_items:
     - { src: "update_production.sh", dest: "{{ mbqueue.files.updates }}", path: "{{ mbqueue.dirs.production }}" }
     - { src: "update_testing.sh", dest: "{{ mbqueue.files.testing }}", path: "{{ mbqueue.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbqueue.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbqueue.files.event_scripts }}"

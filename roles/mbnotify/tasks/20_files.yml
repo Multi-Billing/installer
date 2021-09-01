@@ -48,3 +48,13 @@
   with_items:
     - { src: "update_production.sh", dest: "{{ mbnotify.files.updates }}", path: "{{ mbnotify.dirs.production }}" }
     - { src: "update_testing.sh", dest: "{{ mbnotify.files.testing }}", path: "{{ mbnotify.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbnotify.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbnotify.files.event_scripts }}"
