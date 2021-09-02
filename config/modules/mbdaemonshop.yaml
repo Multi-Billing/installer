@@ -1,0 +1,43 @@
+mbdaemonshop:
+  system_user: "mbdaemonshop"
+  software:
+    database:
+      mysql_user: "mbdaemonshop"
+      mysql_role: "role_mbdaemonshop"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22160"
+      pid: "/var/run/mbdaemonshop/mbdaemonshop_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22161"
+      pid: "/var/run/mbdaemonshop/mbdaemonshop_testing.pid"
+  dirs:
+    module: "mbdaemonshop"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_port_restart" ]
+    systemd_production_service: "mbdaemonshop.service"
+    systemd_testing_service: "mbdaemonshop_testing.service"
+    archive: "mbdaemonshop.tar.gz"
+    updates: "mbdaemonshop_update.sh"
+    testing: "mbdaemonshop_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 1864
+    cores: 2

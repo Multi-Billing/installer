@@ -1,0 +1,43 @@
+mbdaemonvoip:
+  system_user: "mbdaemonvoip"
+  software:
+    database:
+      mysql_user: "mbdaemonvoip"
+      mysql_role: "role_mbdaemonvoip"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22190"
+      pid: "/var/run/mbdaemonvoip/mbdaemonvoip_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22191"
+      pid: "/var/run/mbdaemonvoip/mbdaemonvoip_testing.pid"
+  dirs:
+    module: "mbdaemonvoip"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_port_restart" ]
+    systemd_production_service: "mbdaemonvoip.service"
+    systemd_testing_service: "mbdaemonvoip_testing.service"
+    archive: "mbdaemonvoip.tar.gz"
+    updates: "mbdaemonvoip_update.sh"
+    testing: "mbdaemonvoip_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 1864
+    cores: 2

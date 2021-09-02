@@ -1,0 +1,50 @@
+mbhookunsafeext:
+  software:
+    database:
+      mysql_user: "mbhookunsafeext"
+      mysql_role: "role_mbhookunsafeext"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+    nginx:
+      subdomain:
+        # поддомен админки, если основной домен ispnet.demo
+        # то получится:
+        #   рабочая версия: mbhookunsafeext.ispnet.demo
+        #   тестовая версия: test.mbhookunsafeext.ispnet.demo
+        production: "mbhookunsafeext"
+        testing: "test.mbhookunsafeext"
+    fpm:
+      production:
+        pool_name: "mbhookunsafeext_production"
+        pool_file: "mbhookunsafeext_production.conf"
+        socket: "/var/run/php-fpm_mbhookunsafeext_production.sock"
+      testing:
+        pool_name: "mbhookunsafeext_testing"
+        pool_file: "mbhookunsafeext_testing.conf"
+        socket: "/var/run/php-fpm_mbhookunsafeext_testing.sock"
+  dirs:
+    module: "mbhookunsafeext"
+    chroot: "chroot"
+    www: "/var/www"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_device_add", "mb_event_device_del", "mb_event_iptv_add", "mb_event_iptv_del", "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_change", "mb_event_port_restart", "mb_event_realip_change", "mb_event_switch_change", "mb_event_tarif_change", "mb_event_ticket_close", "mb_event_ticket_message", "mb_event_ticket_open", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
+    archive_backend: "mbhookunsafeext.tar.gz"
+    update_backend: "mbhookunsafeext_update.sh"
+    testing_backend: "mbhookunsafeext_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

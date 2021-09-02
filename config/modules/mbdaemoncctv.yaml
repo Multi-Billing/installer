@@ -1,0 +1,43 @@
+mbdaemoncctv:
+  system_user: "mbdaemoncctv"
+  software:
+    database:
+      mysql_user: "mbdaemoncctv"
+      mysql_role: "role_mbdaemoncctv"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22100"
+      pid: "/var/run/mbdaemoncctv/mbdaemoncctv_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22101"
+      pid: "/var/run/mbdaemoncctv/mbdaemoncctv_testing.pid"
+  dirs:
+    module: "mbdaemoncctv"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_port_restart" ]
+    systemd_production_service: "mbdaemoncctv.service"
+    systemd_testing_service: "mbdaemoncctv_testing.service"
+    archive: "mbdaemoncctv.tar.gz"
+    updates: "mbdaemoncctv_update.sh"
+    testing: "mbdaemoncctv_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 1864
+    cores: 2

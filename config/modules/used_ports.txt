@@ -1,8 +1,49 @@
-mbdaemoncore: 22007, 22008
-mbdaemonbot: 22010,22011
-mbdaemonmessenger: 22020, 22021
-mbdaemonnotify: 22030, 22031
-mbdaemonqueue: 22040, 22041
-mbdaemontv: 22050, 22051
-mbdaemonfinance: 22060, 22061
-mbdaemonfiscalization: 22070, 22071
+mbadmin
+mbcabapi
+mbcabinet
+mbconsole
+mbcron
+mbdaemonacs 22080, 22081
+mbdaemonapi 22090, 22091
+mbdaemonbot 22010,22011
+mbdaemoncctv 22100,22101
+mbdaemoncore 22007, 22008
+mbdaemonextbill 22110,22111
+mbdaemonfailover 22120,22121
+mbdaemonfinance 22060, 22061
+mbdaemonfiscalization 22070, 22071
+mbdaemonmessenger 22020, 22021
+mbdaemonnotify 22030, 22031
+mbdaemononureg 22130,22131
+mbdaemonosbb 22140,22141
+mbdaemonpon 22150,22151
+mbdaemonqueue 22040, 22041
+mbdaemonshop 22160,22161
+mbdaemonsnmp 22170,22171
+mbdaemontasks 22180,22181
+mbdaemontrapd 22190,22191
+mbdaemontv 22050, 22051
+mbdaemonvoip 22200,22201
+mbfront
+mbhookacs
+mbhookapi
+mbhookbots
+mbhookcctv
+mbhookext
+mbhookextbill
+mbhookfailover
+mbhookfiscalization
+mbhookmessenger
+mbhookonureg
+mbhookosbb
+mbhookpaygw
+mbhookpon
+mbhookshop
+mbhooksorm
+mbhooktasks
+mbhooktrapd
+mbhooktv
+mbhookunsafeext
+mbhookvoip
+mbp
+mbsql

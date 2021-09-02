@@ -1,0 +1,50 @@
+mbhookfailover:
+  software:
+    database:
+      mysql_user: "mbhookfailover"
+      mysql_role: "role_mbhookfailover"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+    nginx:
+      subdomain:
+        # поддомен админки, если основной домен ispnet.demo
+        # то получится:
+        #   рабочая версия: mbhookfailover.ispnet.demo
+        #   тестовая версия: test.mbhookfailover.ispnet.demo
+        production: "mbhookfailover"
+        testing: "test.mbhookfailover"
+    fpm:
+      production:
+        pool_name: "mbhookfailover_production"
+        pool_file: "mbhookfailover_production.conf"
+        socket: "/var/run/php-fpm_mbhookfailover_production.sock"
+      testing:
+        pool_name: "mbhookfailover_testing"
+        pool_file: "mbhookfailover_testing.conf"
+        socket: "/var/run/php-fpm_mbhookfailover_testing.sock"
+  dirs:
+    module: "mbhookfailover"
+    chroot: "chroot"
+    www: "/var/www"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_device_add", "mb_event_device_del", "mb_event_iptv_add", "mb_event_iptv_del", "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_change", "mb_event_port_restart", "mb_event_realip_change", "mb_event_switch_change", "mb_event_tarif_change", "mb_event_ticket_close", "mb_event_ticket_message", "mb_event_ticket_open", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
+    archive_backend: "mbhookfailover.tar.gz"
+    update_backend: "mbhookfailover_update.sh"
+    testing_backend: "mbhookfailover_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1
