@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing mbdaemonbot
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbdaemonbot.system_user }}
+RuntimeDirectory={{ mbdaemonbot.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbdaemonbot.params.production.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbdaemonbot.dirs.module }}/{{ mbdaemonbot.dirs.production }}/mbdaemonbot.php
+ExecReload=/bin/kill -s SIGHUP $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

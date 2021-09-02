@@ -1,0 +1,13 @@
+---
+- name: "add {{ mbdaemoncore.dirs.module }} cron file"
+  template:
+    src: "module.cron"
+    dest: "{{ OS.cron.dirs.custom }}/{{ mbdaemoncore.dirs.module }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+
+- name: "restart {{ OS.cron.name }} service"
+  service:
+    name: "{{ OS.cron.name }}"
+    state: restarted

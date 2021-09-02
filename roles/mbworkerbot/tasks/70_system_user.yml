@@ -1,6 +1,0 @@
----
-- name: "create system user for {{ mbworkerbot.dirs.module }}"
-  user:
-    name: "{{ mbworkerbot.system_user }}"
-    create_home : no
-    shell: /bin/nologin

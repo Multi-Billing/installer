@@ -1,0 +1,48 @@
+---
+- name: "replace {{ mbdaemonmessenger.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.dirs.production }}/{{ mbdaemonmessenger.dirs.config }}/{{ mbdaemonmessenger.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonmessenger.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonmessenger_pid}', value: "{{ mbdaemonmessenger.params.production.pid }}" }
+    - { name: '{mbdaemonmessenger_ip}', value: "{{ mbdaemonmessenger.params.production.ip }}" }
+    - { name: '{mbdaemonmessenger_port}', value: "{{ mbdaemonmessenger.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.dirs.production }}/{{ mbdaemonmessenger.dirs.config }}/{{ mbdaemonmessenger.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonmessenger.software.database.mysql_pass }}"
+  when: mbdaemonmessenger.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbdaemonmessenger.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.dirs.testing }}/{{ mbdaemonmessenger.dirs.config }}/{{ mbdaemonmessenger.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonmessenger.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonmessenger_pid}', value: "{{ mbdaemonmessenger.params.testing.pid }}" }
+    - { name: '{mbdaemonmessenger_ip}', value: "{{ mbdaemonmessenger.params.production.ip }}" }
+    - { name: '{mbdaemonmessenger_port}', value: "{{ mbdaemonmessenger.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.dirs.testing }}/{{ mbdaemonmessenger.dirs.config }}/{{ mbdaemonmessenger.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonmessenger.software.database.mysql_pass }}"
+  when: mbdaemonmessenger.software.database.mysql_pass != ""
+  no_log: true

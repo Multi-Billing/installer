@@ -1,0 +1,48 @@
+---
+- name: "replace {{ mbdaemoncore.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.dirs.production }}/{{ mbdaemoncore.dirs.config }}/{{ mbdaemoncore.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemoncore.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{kernel_pid}', value: "{{ mbdaemoncore.params.production.pid }}" }
+    - { name: '{kernel_ip}', value: "{{ mbdaemoncore.params.production.ip }}" }
+    - { name: '{kernel_port}', value: "{{ mbdaemoncore.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.dirs.production }}/{{ mbdaemoncore.dirs.config }}/{{ mbdaemoncore.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemoncore.software.database.mysql_pass }}"
+  when: mbdaemoncore.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbdaemoncore.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.dirs.testing }}/{{ mbdaemoncore.dirs.config }}/{{ mbdaemoncore.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemoncore.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{kernel_pid}', value: "{{ mbdaemoncore.params.testing.pid }}" }
+    - { name: '{kernel_ip}', value: "{{ mbdaemoncore.params.testing.ip }}" }
+    - { name: '{kernel_port}', value: "{{ mbdaemoncore.params.testing.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.dirs.testing }}/{{ mbdaemoncore.dirs.config }}/{{ mbdaemoncore.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemoncore.software.database.mysql_pass }}"
+  when: mbdaemoncore.software.database.mysql_pass != ""
+  no_log: true

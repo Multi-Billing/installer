@@ -2,8 +2,8 @@
 # создание переменных для облегчения переноса на другие модули
 - name: "register variables"
   set_fact:
-    module_name="{{ mbworkerbot.dirs.module }}"
-    configuration="{{ mbworkerbot.software.database }}"
+    module_name="{{ mbdaemonbot.dirs.module }}"
+    configuration="{{ mbdaemonbot.software.database }}"
 
 # создание переменных для удобства
 - name: "register mysql_user"

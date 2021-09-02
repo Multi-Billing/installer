@@ -1,0 +1,35 @@
+---
+- name: "detect php"
+  command: which php
+  register: php_path
+
+- name: "systemd"
+  block:
+    - name: "create systemd {{ mbdaemonqueue.files.systemd_production_service }}"
+      template:
+        src: "{{ mbdaemonqueue.files.systemd_production_service }}"
+        dest: "{{ OS.systemd }}/{{ mbdaemonqueue.files.systemd_production_service }}"
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: "create systemd {{ mbdaemonqueue.files.systemd_testing_service }}"
+      template:
+        src: "{{ mbdaemonqueue.files.systemd_testing_service }}"
+        dest: "{{ OS.systemd }}/{{ mbdaemonqueue.files.systemd_testing_service }}"
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: "reload systemd"
+      command: systemctl daemon-reload
+#    - name: "add {{ mbdaemonqueue.files.systemd_production_service }} to startup"
+#      service:
+#        name: "{{ mbdaemonqueue.files.systemd_production_service }}"
+#        enabled: yes
+#
+#    - name: "run {{ mbdaemonqueue.files.systemd_production_service }}"
+#      service:
+#        name: "{{ mbdaemonqueue.files.systemd_production_service }}"
+#        state: started
+  when: php_path.stdout != ""

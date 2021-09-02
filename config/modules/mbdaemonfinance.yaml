@@ -1,0 +1,43 @@
+mbdaemonfinance:
+  system_user: "mbdaemonfinance"
+  software:
+    database:
+      mysql_user: "mbdaemonfinance"
+      mysql_role: "role_mbdaemonfinance"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22010"
+      pid: "/var/run/mbdaemonfinance/mbdaemonfinance_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22011"
+      pid: "/var/run/mbdaemonfinance/mbdaemonfinance_testing.pid"
+  dirs:
+    module: "mbdaemonfinance"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_restart", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
+    systemd_production_service: "mbdaemonfinance.service"
+    systemd_testing_service: "mbdaemonfinance_testing.service"
+    archive: "mbdaemonfinance.tar.gz"
+    updates: "mbdaemonfinance_update.sh"
+    testing: "mbdaemonfinance_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

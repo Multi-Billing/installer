@@ -5,12 +5,12 @@
 
 - name: "check RAM"
   assert:
-    that: "ansible_memtotal_mb >= {{ mbqueue.requirements.ram }}"
-    fail_msg: "RAM size: {{ ansible_memtotal_mb }}, is lower than {{ mbqueue.requirements.ram }}"
+    that: "ansible_memtotal_mb >= {{ mbdaemonqueue.requirements.ram }}"
+    fail_msg: "RAM size: {{ ansible_memtotal_mb }}, is lower than {{ mbdaemonqueue.requirements.ram }}"
     success_msg: "RAM size: {{ ansible_memtotal_mb }}"
 
 - name: "check CPU"
   assert:
-    that: "ansible_processor_vcpus >= {{ mbqueue.requirements.cores }}"
-    fail_msg: "cores count: {{ ansible_processor_vcpus }}, is lower than {{ mbqueue.requirements.cores }}"
+    that: "ansible_processor_vcpus >= {{ mbdaemonqueue.requirements.cores }}"
+    fail_msg: "cores count: {{ ansible_processor_vcpus }}, is lower than {{ mbdaemonqueue.requirements.cores }}"
     success_msg: "CPU cores: {{ ansible_processor_vcpus }}"

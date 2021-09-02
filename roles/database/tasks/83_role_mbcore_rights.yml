@@ -1,6 +1,6 @@
 ---
-- name: "grant rights to {{ mbcore.software.database.mysql_role }} role"
-  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "GRANT ALL PRIVILEGES ON {{ item }}.* TO '{{ mbcore.software.database.mysql_role }}'"
+- name: "grant rights to {{ mbdaemoncore.software.database.mysql_role }} role"
+  shell: mysql --defaults-file="{{ billing.mysql_connect }}" -e "GRANT ALL PRIVILEGES ON {{ item }}.* TO '{{ mbdaemoncore.software.database.mysql_role }}'"
   with_items:
     - "{{ mysql.database }}"
     - "{{ mysql.testing }}"

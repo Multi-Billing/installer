@@ -1,0 +1,6 @@
+---
+- name: "create system user for {{ mbdaemonmessenger.dirs.module }}"
+  user:
+    name: "{{ mbdaemonmessenger.system_user }}"
+    create_home : no
+    shell: /bin/nologin

@@ -1,0 +1,50 @@
+mbhookpaygw:
+  software:
+    database:
+      mysql_user: "mbhookpaygw"
+      mysql_role: "role_mbhookpaygw"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+    nginx:
+      subdomain:
+        # поддомен админки, если основной домен ispnet.demo
+        # то получится:
+        #   рабочая версия: payments.ispnet.demo
+        #   тестовая версия: test.payments.ispnet.demo
+        production: "payments"
+        testing: "test.payments"
+    fpm:
+      production:
+        pool_name: "mbhookpaygw_production"
+        pool_file: "mbhookpaygw_production.conf"
+        socket: "/var/run/php-fpm_mbhookpaygw_production.sock"
+      testing:
+        pool_name: "mbhookpaygw_testing"
+        pool_file: "mbhookpaygw_testing.conf"
+        socket: "/var/run/php-fpm_mbhookpaygw_testing.sock"
+  dirs:
+    module: "mbhookpaygw"
+    chroot: "chroot"
+    www: "/var/www"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_restart", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
+    archive_backend: "mbhookpaygw.tar.gz"
+    update_backend: "mbhookpaygw_update.sh"
+    testing_backend: "mbhookpaygw_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

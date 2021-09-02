@@ -2,8 +2,8 @@
 # создание переменных для облегчения переноса на другие модули
 - name: "register variables"
   set_fact:
-    module_name="{{ mbqueue.dirs.module }}"
-    configuration="{{ mbqueue.software.database }}"
+    module_name="{{ mbdaemonqueue.dirs.module }}"
+    configuration="{{ mbdaemonqueue.software.database }}"
 
 # создание переменных для удобства
 - name: "register mysql_user"

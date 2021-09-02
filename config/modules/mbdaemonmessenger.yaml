@@ -1,0 +1,43 @@
+mbdaemonmessenger:
+  system_user: "mbdaemonmessenger"
+  software:
+    database:
+      mysql_user: "mbdaemonmessenger"
+      mysql_role: "role_mbdaemonmessenger"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22020"
+      pid: "/var/run/mbdaemonmessenger/mbdaemonmessenger_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22021"
+      pid: "/var/run/mbdaemonmessenger/mbdaemonmessenger_testing.pid"
+  dirs:
+    module: "mbdaemonmessenger"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_device_add", "mb_event_device_del", "mb_event_iptv_add", "mb_event_iptv_del", "mb_event_iptv_disable", "mb_event_iptv_enable", "mb_event_payment", "mb_event_port_change", "mb_event_port_restart", "mb_event_realip_change", "mb_event_switch_change", "mb_event_tarif_change", "mb_event_ticket_close", "mb_event_ticket_message", "mb_event_ticket_open", "mb_event_user_blocked", "mb_event_user_state_change", "mb_event_user_unblocked" ]
+    systemd_production_service: "mbdaemonmessenger.service"
+    systemd_testing_service: "mbdaemonmessenger_testing.service"
+    archive: "mbdaemonmessenger.tar.gz"
+    updates: "mbdaemonmessenger_update.sh"
+    testing: "mbdaemonmessenger_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

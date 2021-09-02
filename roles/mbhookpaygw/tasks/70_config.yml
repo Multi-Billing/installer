@@ -1,0 +1,77 @@
+---
+- name: "copy config"
+  copy:
+    src: "{{ mbhookpaygw.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/config/{{ mbhookpaygw.files.config }}"
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"
+
+- name: "replace timezone"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{timezone}"
+    replace: "{{ timezone.stdout }}"
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"
+
+- name: "replace main log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{log_main}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.files.log_main }}"
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"
+
+- name: "replace debug log"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{log_debug}"
+    replace: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.files.log_debug }}"
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbhookpaygw.software.database.mysql_pass }}"
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"
+  when: mbhookpaygw.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace mysql username"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{username}"
+    replace: "{{ mbhookpaygw.software.database.mysql_user }}"
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.database }}"
+
+- name: "replace mysql database name"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{database}"
+    replace: "{{ mysql.testing }}"
+
+- name: "replace mysql host"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/config/{{ mbhookpaygw.files.config }}"
+    regexp: "{server_host}"
+    replace: "{{ billing.mysql_server }}"
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"

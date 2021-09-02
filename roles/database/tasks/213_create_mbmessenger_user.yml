@@ -2,8 +2,8 @@
 # создание переменных для облегчения переноса на другие модули
 - name: "register variables"
   set_fact:
-    module_name="{{ mbmessenger.dirs.module }}"
-    configuration="{{ mbmessenger.software.database }}"
+    module_name="{{ mbdaemonmessenger.dirs.module }}"
+    configuration="{{ mbdaemonmessenger.software.database }}"
 
 # создание переменных для удобства
 - name: "register mysql_user"

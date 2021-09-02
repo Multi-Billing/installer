@@ -1,0 +1,59 @@
+---
+- name: "copy {{ mbhookpaygw.dirs.module }} backend archive"
+  copy:
+    src: "{{ mbhookpaygw.files.archive_backend }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbhookpaygw.files.archive_backend }}"
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbhookpaygw.dirs.module }} backend archive"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbhookpaygw.files.archive_backend }}"
+    dest: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item }}/public/"
+  with_items:
+    - "{{ mbhookpaygw.dirs.production }}"
+    - "{{ mbhookpaygw.dirs.testing }}"
+
+- name: "create main log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.files.log_main }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create debug log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.files.log_debug }}"
+    state: touch
+    owner: "{{ OS.fpm.config.pool.user }}"
+    group: "{{ OS.fpm.config.pool.user }}"
+    mode: u=rw,g=r,o=r
+
+- name: "create update log file"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.files.log_update }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ item.path }}/{{ mbhookpaygw.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbhookpaygw.files.update_backend }}", path: "{{ mbhookpaygw.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbhookpaygw.files.testing_backend }}", path: "{{ mbhookpaygw.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbhookpaygw.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbhookpaygw.files.event_scripts }}"

@@ -1,0 +1,17 @@
+---
+- name: "create {{ mbdaemonnotify.dirs.module }} catalogs"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemonnotify.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonnotify.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbdaemonnotify.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.production }}/{{ mbdaemonnotify.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.production }}/{{ mbdaemonnotify.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.testing }}/{{ mbdaemonnotify.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.testing }}/{{ mbdaemonnotify.dirs.updates }}"

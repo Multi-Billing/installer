@@ -42,8 +42,8 @@ mbcabapi:
     update_backend: "mbcabapi_update.sh"
     testing_backend: "mbcabapi_testing.sh"
     config: "config.xml"
-    log_main: "mbcabapi.log"
-    log_debug: "mbcabapi.debug"
+    log_main: "general.log"
+    log_debug: "debug.log"
     log_update: "update.log"
   requirements:
     ram: 512

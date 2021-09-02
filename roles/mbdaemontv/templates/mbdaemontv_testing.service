@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing testing mbdaemontv
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbdaemontv.system_user }}
+RuntimeDirectory={{ mbdaemontv.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbdaemontv.params.testing.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ mbdaemontv.dirs.testing }}/mbdaemontv.php --testing
+ExecReload=/bin/kill -s SIGTERM $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

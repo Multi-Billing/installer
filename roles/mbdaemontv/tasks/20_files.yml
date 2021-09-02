@@ -1,0 +1,60 @@
+---
+- name: "copy {{ mbdaemontv.files.archive }}"
+  copy:
+    src: "{{ mbdaemontv.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbdaemontv.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbdaemontv.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbdaemontv.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbdaemontv.dirs.production }}"
+    - "{{ mbdaemontv.dirs.testing }}"
+
+- name: "copy {{ mbdaemontv.files.config }} files"
+  copy:
+    src: "{{ mbdaemontv.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ item }}/{{ mbdaemontv.dirs.config }}/{{ mbdaemontv.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbdaemontv.dirs.production }}"
+    - "{{ mbdaemontv.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemontv.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbdaemontv.files.log_main }}"
+    - "{{ mbdaemontv.files.log_debug }}"
+    - "{{ mbdaemontv.files.log_update }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ item.path }}/{{ mbdaemontv.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbdaemontv.files.updates }}", path: "{{ mbdaemontv.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbdaemontv.files.testing }}", path: "{{ mbdaemontv.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemontv.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbdaemontv.files.event_scripts }}"

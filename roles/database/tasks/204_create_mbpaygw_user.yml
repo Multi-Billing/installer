@@ -2,8 +2,8 @@
 # создание переменных для облегчения переноса на другие модули
 - name: "register variables"
   set_fact:
-    module_name="{{ mbpaygw.dirs.module }}"
-    configuration="{{ mbpaygw.software.database }}"
+    module_name="{{ mbhookpaygw.dirs.module }}"
+    configuration="{{ mbhookpaygw.software.database }}"
 
 # создание переменных для удобства
 - name: "register mysql_user"

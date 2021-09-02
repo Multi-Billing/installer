@@ -46,8 +46,8 @@ mbadmin:
     testing_backend: "mbadmin_backend_testing.sh"
     testing_frontend: "mbadmin_frontend_testing.sh"
     config: "config.xml"
-    log_main: "mbadmin.log"
-    log_debug: "mbadmin.debug"
+    log_main: "general.log"
+    log_debug: "debug.log"
     log_update: "update.log"
   requirements:
     ram: 1864

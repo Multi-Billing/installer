@@ -2,8 +2,8 @@
 # создание переменных для облегчения переноса на другие модули
 - name: "register variables"
   set_fact:
-    module_name="{{ mbtvdaemon.dirs.module }}"
-    configuration="{{ mbtvdaemon.software.database }}"
+    module_name="{{ mbdaemontv.dirs.module }}"
+    configuration="{{ mbdaemontv.software.database }}"
 
 # создание переменных для удобства
 - name: "register mysql_user"

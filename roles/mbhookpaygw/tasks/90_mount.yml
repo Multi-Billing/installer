@@ -1,0 +1,37 @@
+---
+- name: "register {{ mbhookpaygw.dirs.production }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.chroot }}/{{ mbhookpaygw.dirs.production }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/public -> {{ chroot_dir }}{{ mbhookpaygw.dirs.www }}/{{ mbhookpaygw.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/public {{ chroot_dir }}{{ mbhookpaygw.dirs.www }}/{{ mbhookpaygw.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+      # event scripts
+      {{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbhookpaygw.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.scripts }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbhookpaygw.dirs.module }} {{ mbhookpaygw.dirs.production }}"
+
+- name: "register {{ mbhookpaygw.dirs.testing }} chroot dir"
+  set_fact: chroot_dir="{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.chroot }}/{{ mbhookpaygw.dirs.testing }}"
+
+- name: "mount {{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/public -> {{ chroot_dir }}{{ mbhookpaygw.dirs.www }}/{{ mbhookpaygw.dirs.module }}"
+  blockinfile:
+    path: "/etc/fstab"
+    block: |
+      # www
+      {{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/public {{ chroot_dir }}{{ mbhookpaygw.dirs.www }}/{{ mbhookpaygw.dirs.module }} none defaults,bind 0 0
+      # config
+      {{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/config {{ chroot_dir }}{{ billing.dirs.home }}/config none defaults,bind 0 0
+      # logs
+      {{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.dirs.module }} {{ chroot_dir }}{{ billing.dirs.home }}/{{ billing.dirs.logs }} none defaults,bind 0 0
+    marker: "# {mark} {{ mbhookpaygw.dirs.module }} {{ mbhookpaygw.dirs.testing }}"
+
+- name: "re-mount"
+  command: "mount -a"
+  args:
+    warn: no

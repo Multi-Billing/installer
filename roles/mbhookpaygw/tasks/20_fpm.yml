@@ -1,0 +1,16 @@
+---
+- name: "generate pool configuration"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ OS.fpm.dirs.pool }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - { src: "fpm_production.conf", dest: "{{ mbhookpaygw.software.fpm.production.pool_file }}" }
+    - { src: "fpm_testing.conf", dest: "{{ mbhookpaygw.software.fpm.testing.pool_file }}" }
+
+- name: "restart {{ OS.fpm.name }} service"
+  service:
+    name: "{{ OS.fpm.name }}"
+    state: restarted

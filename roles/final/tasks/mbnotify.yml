@@ -1,9 +1,9 @@
 ---
 - name: "check info to show"
   stat:
-    path: "{{ billing.dirs.home }}/sql_mbnotify.info"
+    path: "{{ billing.dirs.home }}/sql_mbdaemonnotify.info"
   register: show_info
 
 - name: "show info"
-  debug: msg="{{ lookup('file', '{{ billing.dirs.home }}/sql_mbnotify.info').splitlines() }}"
+  debug: msg="{{ lookup('file', '{{ billing.dirs.home }}/sql_mbdaemonnotify.info').splitlines() }}"
   when: show_info.stat.exists

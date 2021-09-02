@@ -2,8 +2,8 @@
 # создание переменных для облегчения переноса на другие модули
 - name: "register variables"
   set_fact:
-    module_name="{{ mbnotify.dirs.module }}"
-    configuration="{{ mbnotify.software.database }}"
+    module_name="{{ mbdaemonnotify.dirs.module }}"
+    configuration="{{ mbdaemonnotify.software.database }}"
 
 # создание переменных для удобства
 - name: "register mysql_user"

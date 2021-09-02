@@ -16,17 +16,17 @@
         - "mbadmin"
         - "mbcabapi"
         - "mbsql"
-        - "mbcore"
-        - "mbpaygw"
+        - "mbdaemoncore"
+        - "mbhookpaygw"
         - "mbcron"
         - "mbradius"
         - "mbcabinet"
         - "mbcabapi"
-        - "mbqueue"
-        - "mbfinance"
-        - "mbmessenger"
-        - "mbtvdaemon"
-        - "mbworkerbot"
+        - "mbdaemonqueue"
+        - "mbdaemonfinance"
+        - "mbdaemonmessenger"
+        - "mbdaemontv"
+        - "mbdaemonbot"
 
     - name: "read OS config"
       include_vars: "config/os/{{ ansible_os_family | lower }}_{{ ansible_distribution_major_version }}.yaml"
@@ -68,10 +68,10 @@
     - database
     - nginx
     - mbsql
-    - mbcore
+    - mbdaemoncore
     - mbradius
     - mbadmin
     - mbcron
-    - mbpaygw
+    - mbhookpaygw
     - mbcabinet
     - final

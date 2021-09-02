@@ -42,8 +42,8 @@ mbcabinet:
     update_backend: "mbcabinet_update.sh"
     testing_backend: "mbcabinet_testing.sh"
     config: "config.xml"
-    log_main: "mbcabinet.log"
-    log_debug: "mbcabinet.debug"
+    log_main: "general.log"
+    log_debug: "debug.log"
     log_update: "update.log"
   requirements:
     ram: 1864

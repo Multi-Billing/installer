@@ -1,0 +1,60 @@
+---
+- name: "copy {{ mbdaemonbot.files.archive }}"
+  copy:
+    src: "{{ mbdaemonbot.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbdaemonbot.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbdaemonbot.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbdaemonbot.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonbot.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbdaemonbot.dirs.production }}"
+    - "{{ mbdaemonbot.dirs.testing }}"
+
+- name: "copy {{ mbdaemonbot.files.config }} files"
+  copy:
+    src: "{{ mbdaemonbot.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonbot.dirs.module }}/{{ item }}/{{ mbdaemonbot.dirs.config }}/{{ mbdaemonbot.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbdaemonbot.dirs.production }}"
+    - "{{ mbdaemonbot.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonbot.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbdaemonbot.files.log_main }}"
+    - "{{ mbdaemonbot.files.log_debug }}"
+    - "{{ mbdaemonbot.files.log_update }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonbot.dirs.module }}/{{ item.path }}/{{ mbdaemonbot.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbdaemonbot.files.updates }}", path: "{{ mbdaemonbot.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbdaemonbot.files.testing }}", path: "{{ mbdaemonbot.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemonbot.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbdaemonbot.files.event_scripts }}"

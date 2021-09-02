@@ -1,6 +1,0 @@
----
-- name: "create system user for {{ mbqueue.dirs.module }}"
-  user:
-    name: "{{ mbqueue.system_user }}"
-    create_home : no
-    shell: /bin/nologin

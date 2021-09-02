@@ -1,0 +1,48 @@
+---
+- name: "replace {{ mbdaemonnotify.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.production }}/{{ mbdaemonnotify.dirs.config }}/{{ mbdaemonnotify.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonnotify.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonnotify_pid}', value: "{{ mbdaemonnotify.params.production.pid }}" }
+    - { name: '{mbdaemonnotify_ip}', value: "{{ mbdaemonnotify.params.production.ip }}" }
+    - { name: '{mbdaemonnotify_port}', value: "{{ mbdaemonnotify.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.production }}/{{ mbdaemonnotify.dirs.config }}/{{ mbdaemonnotify.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonnotify.software.database.mysql_pass }}"
+  when: mbdaemonnotify.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbdaemonnotify.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.testing }}/{{ mbdaemonnotify.dirs.config }}/{{ mbdaemonnotify.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonnotify.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonnotify_pid}', value: "{{ mbdaemonnotify.params.testing.pid }}" }
+    - { name: '{mbdaemonnotify_ip}', value: "{{ mbdaemonnotify.params.production.ip }}" }
+    - { name: '{mbdaemonnotify_port}', value: "{{ mbdaemonnotify.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.testing }}/{{ mbdaemonnotify.dirs.config }}/{{ mbdaemonnotify.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonnotify.software.database.mysql_pass }}"
+  when: mbdaemonnotify.software.database.mysql_pass != ""
+  no_log: true

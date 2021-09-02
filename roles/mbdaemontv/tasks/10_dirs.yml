@@ -1,0 +1,17 @@
+---
+- name: "create {{ mbdaemontv.dirs.module }} catalogs"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemontv.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemontv.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbdaemontv.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ mbdaemontv.dirs.production }}/{{ mbdaemontv.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ mbdaemontv.dirs.production }}/{{ mbdaemontv.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ mbdaemontv.dirs.testing }}/{{ mbdaemontv.dirs.config }}"
+    - "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ mbdaemontv.dirs.testing }}/{{ mbdaemontv.dirs.updates }}"

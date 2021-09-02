@@ -2,4 +2,4 @@
 
 cd {{ module_path }} || exit
 
-php ./index.php unlim_block
+php ./mbcron.php unlim_block

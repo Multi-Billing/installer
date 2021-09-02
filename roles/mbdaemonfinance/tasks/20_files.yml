@@ -1,0 +1,60 @@
+---
+- name: "copy {{ mbdaemonfinance.files.archive }}"
+  copy:
+    src: "{{ mbdaemonfinance.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbdaemonfinance.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbdaemonfinance.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbdaemonfinance.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbdaemonfinance.dirs.production }}"
+    - "{{ mbdaemonfinance.dirs.testing }}"
+
+- name: "copy {{ mbdaemonfinance.files.config }} files"
+  copy:
+    src: "{{ mbdaemonfinance.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ item }}/{{ mbdaemonfinance.dirs.config }}/{{ mbdaemonfinance.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbdaemonfinance.dirs.production }}"
+    - "{{ mbdaemonfinance.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfinance.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbdaemonfinance.files.log_main }}"
+    - "{{ mbdaemonfinance.files.log_debug }}"
+    - "{{ mbdaemonfinance.files.log_update }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ item.path }}/{{ mbdaemonfinance.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbdaemonfinance.files.updates }}", path: "{{ mbdaemonfinance.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbdaemonfinance.files.testing }}", path: "{{ mbdaemonfinance.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemonfinance.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbdaemonfinance.files.event_scripts }}"

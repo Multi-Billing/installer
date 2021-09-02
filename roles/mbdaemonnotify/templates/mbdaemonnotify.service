@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing mbdaemonnotify
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbdaemonnotify.system_user }}
+RuntimeDirectory={{ mbdaemonnotify.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbdaemonnotify.params.production.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbdaemonnotify.dirs.module }}/{{ mbdaemonnotify.dirs.production }}/mbdaemonnotify.php
+ExecReload=/bin/kill -s SIGHUP $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

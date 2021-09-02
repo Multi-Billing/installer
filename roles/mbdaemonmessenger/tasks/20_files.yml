@@ -1,0 +1,60 @@
+---
+- name: "copy {{ mbdaemonmessenger.files.archive }}"
+  copy:
+    src: "{{ mbdaemonmessenger.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbdaemonmessenger.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbdaemonmessenger.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbdaemonmessenger.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbdaemonmessenger.dirs.production }}"
+    - "{{ mbdaemonmessenger.dirs.testing }}"
+
+- name: "copy {{ mbdaemonmessenger.files.config }} files"
+  copy:
+    src: "{{ mbdaemonmessenger.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ item }}/{{ mbdaemonmessenger.dirs.config }}/{{ mbdaemonmessenger.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbdaemonmessenger.dirs.production }}"
+    - "{{ mbdaemonmessenger.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonmessenger.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbdaemonmessenger.files.log_main }}"
+    - "{{ mbdaemonmessenger.files.log_debug }}"
+    - "{{ mbdaemonmessenger.files.log_update }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ item.path }}/{{ mbdaemonmessenger.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbdaemonmessenger.files.updates }}", path: "{{ mbdaemonmessenger.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbdaemonmessenger.files.testing }}", path: "{{ mbdaemonmessenger.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemonmessenger.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbdaemonmessenger.files.event_scripts }}"

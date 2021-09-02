@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbdaemontv.dirs.module }} {{ mbdaemontv.dirs.production }}"
+  command: "/bin/bash {{ mbdaemontv.files.updates }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ mbdaemontv.dirs.production }}/{{ mbdaemontv.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbdaemontv.dirs.module }} {{ mbdaemontv.dirs.testing }}"
+  command: "/bin/bash {{ mbdaemontv.files.testing }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbdaemontv.dirs.module }}/{{ mbdaemontv.dirs.testing }}/{{ mbdaemontv.dirs.updates }}"
+  ignore_errors: yes

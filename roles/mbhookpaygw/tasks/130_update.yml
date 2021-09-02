@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbhookpaygw.dirs.module }} {{ mbhookpaygw.dirs.production }}"
+  command: "/bin/bash {{ mbhookpaygw.files.update_backend }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/{{ mbhookpaygw.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbhookpaygw.dirs.module }} {{ mbhookpaygw.dirs.testing }}"
+  command: "/bin/bash {{ mbhookpaygw.files.testing_backend }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/{{ mbhookpaygw.dirs.updates }}"
+  ignore_errors: yes

@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing testing mbdaemonbot
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbdaemonbot.system_user }}
+RuntimeDirectory={{ mbdaemonbot.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbdaemonbot.params.testing.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbdaemonbot.dirs.module }}/{{ mbdaemonbot.dirs.testing }}/mbdaemonbot.php --testing
+ExecReload=/bin/kill -s SIGTERM $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

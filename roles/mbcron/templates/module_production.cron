@@ -10,18 +10,18 @@
 # *  *  *  *  * user-name  command to be executed
 
 # update
-05 6 * * * root {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.updates }}/mbcron_update.sh
+05 6 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.updates }}/mbcron_update.sh
 
 # billing tasks
-0-59/5 * * * * root {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/5min.sh
+0-59/5 * * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/5min.sh
 
 # mrtg graph
-0-59/5 * * * * root {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/mrtg.sh
+0-59/5 * * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/mrtg.sh
 
 # daily write-offs
-57 23 * * * root {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/block.sh
-58 23 * * * root {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/day.sh
+57 23 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/block.sh
+58 23 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/day.sh
 
 # monthly write-offs
-59 23 28-31 * * root [ "$(date +%d -d tomorrow)" = "01" ] && {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/lastday.sh
-01 0 1 * * root {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/mth.sh
+59 23 28-31 * * {{ OS.fpm.config.pool.user }} [ "$(date +%d -d tomorrow)" = "01" ] && {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/lastday.sh
+01 0 1 * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/scripts/mth.sh

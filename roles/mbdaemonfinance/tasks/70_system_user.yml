@@ -1,0 +1,6 @@
+---
+- name: "create system user for {{ mbdaemonfinance.dirs.module }}"
+  user:
+    name: "{{ mbdaemonfinance.system_user }}"
+    create_home : no
+    shell: /bin/nologin

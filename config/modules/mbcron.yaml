@@ -23,8 +23,8 @@ mbcron:
     updates: "mbcron_update.sh"
     testing: "mbcron_testing.sh"
     config: "config.xml"
-    log_main: "mbcron.log"
-    log_debug: "mbcron.debug"
+    log_main: "general.log"
+    log_debug: "debug.log"
     log_update: "update.log"
     scripts: ["5min.sh", "block.sh", "day.sh", "lastday.sh", "mrtg.sh", "mth.sh"]
   requirements:

@@ -10,4 +10,4 @@
 # *  *  *  *  * user-name  command to be executed
 
 # update
-05 6 * * * root {{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ mbsql.dirs.production }}/{{ mbsql.files.updates }}
+05 6 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbsql.dirs.module }}/{{ mbsql.dirs.production }}/{{ mbsql.files.updates }}

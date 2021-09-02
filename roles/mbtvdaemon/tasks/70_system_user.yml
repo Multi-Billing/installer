@@ -1,6 +1,0 @@
----
-- name: "create system user for {{ mbtvdaemon.dirs.module }}"
-  user:
-    name: "{{ mbtvdaemon.system_user }}"
-    create_home : no
-    shell: /bin/nologin

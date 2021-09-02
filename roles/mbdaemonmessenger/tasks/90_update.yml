@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbdaemonmessenger.dirs.module }} {{ mbdaemonmessenger.dirs.production }}"
+  command: "/bin/bash {{ mbdaemonmessenger.files.updates }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.dirs.production }}/{{ mbdaemonmessenger.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbdaemonmessenger.dirs.module }} {{ mbdaemonmessenger.dirs.testing }}"
+  command: "/bin/bash {{ mbdaemonmessenger.files.testing }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbdaemonmessenger.dirs.module }}/{{ mbdaemonmessenger.dirs.testing }}/{{ mbdaemonmessenger.dirs.updates }}"
+  ignore_errors: yes

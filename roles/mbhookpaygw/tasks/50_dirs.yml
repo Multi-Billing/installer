@@ -1,0 +1,19 @@
+---
+- name: "create {{ mbhookpaygw.dirs.module }} directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - "{{ billing.dirs.home }}/license"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbhookpaygw.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbhookpaygw.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ billing.dirs.backups }}/{{ mbhookpaygw.dirs.module }}"
+    - "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/config"
+    - "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/public"
+    - "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.production }}/{{ mbhookpaygw.dirs.updates }}"
+    - "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/config"
+    - "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/public"
+    - "{{ billing.dirs.home }}/{{ mbhookpaygw.dirs.module }}/{{ mbhookpaygw.dirs.testing }}/{{ mbhookpaygw.dirs.updates }}"

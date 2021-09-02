@@ -10,4 +10,4 @@
 # *  *  *  *  * user-name  command to be executed
 
 # update
-05 6 * * * root {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/{{ mbcabapi.dirs.updates }}/{{ mbcabapi.files.update_backend }}
+05 6 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcabapi.dirs.module }}/{{ mbcabapi.dirs.production }}/{{ mbcabapi.dirs.updates }}/{{ mbcabapi.files.update_backend }}

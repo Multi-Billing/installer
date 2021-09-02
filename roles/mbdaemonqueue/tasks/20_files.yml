@@ -1,0 +1,60 @@
+---
+- name: "copy {{ mbdaemonqueue.files.archive }}"
+  copy:
+    src: "{{ mbdaemonqueue.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbdaemonqueue.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbdaemonqueue.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbdaemonqueue.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonqueue.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbdaemonqueue.dirs.production }}"
+    - "{{ mbdaemonqueue.dirs.testing }}"
+
+- name: "copy {{ mbdaemonqueue.files.config }} files"
+  copy:
+    src: "{{ mbdaemonqueue.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonqueue.dirs.module }}/{{ item }}/{{ mbdaemonqueue.dirs.config }}/{{ mbdaemonqueue.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbdaemonqueue.dirs.production }}"
+    - "{{ mbdaemonqueue.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonqueue.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbdaemonqueue.files.log_main }}"
+    - "{{ mbdaemonqueue.files.log_debug }}"
+    - "{{ mbdaemonqueue.files.log_update }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonqueue.dirs.module }}/{{ item.path }}/{{ mbdaemonqueue.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbdaemonqueue.files.updates }}", path: "{{ mbdaemonqueue.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbdaemonqueue.files.testing }}", path: "{{ mbdaemonqueue.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemonqueue.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbdaemonqueue.files.event_scripts }}"

@@ -2,5 +2,5 @@
 
 cd {{ module_path }} || exit
 
-php ./index.php pay_mth_ost
-php ./index.php tarif_change
+php ./mbcron.php pay_mth_ost
+php ./mbcron.php tarif_change

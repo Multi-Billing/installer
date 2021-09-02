@@ -1,0 +1,48 @@
+---
+- name: "replace {{ mbdaemonfinance.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.dirs.production }}/{{ mbdaemonfinance.dirs.config }}/{{ mbdaemonfinance.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonfinance.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonfinance_pid}', value: "{{ mbdaemonfinance.params.production.pid }}" }
+    - { name: '{mbdaemonfinance_ip}', value: "{{ mbdaemonfinance.params.production.ip }}" }
+    - { name: '{mbdaemonfinance_port}', value: "{{ mbdaemonfinance.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.dirs.production }}/{{ mbdaemonfinance.dirs.config }}/{{ mbdaemonfinance.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonfinance.software.database.mysql_pass }}"
+  when: mbdaemonfinance.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbdaemonfinance.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.dirs.testing }}/{{ mbdaemonfinance.dirs.config }}/{{ mbdaemonfinance.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonfinance.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonfinance_pid}', value: "{{ mbdaemonfinance.params.testing.pid }}" }
+    - { name: '{mbdaemonfinance_ip}', value: "{{ mbdaemonfinance.params.production.ip }}" }
+    - { name: '{mbdaemonfinance_port}', value: "{{ mbdaemonfinance.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.dirs.testing }}/{{ mbdaemonfinance.dirs.config }}/{{ mbdaemonfinance.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonfinance.software.database.mysql_pass }}"
+  when: mbdaemonfinance.software.database.mysql_pass != ""
+  no_log: true

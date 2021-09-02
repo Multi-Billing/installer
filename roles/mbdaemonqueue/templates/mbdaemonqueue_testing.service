@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing testing mbdaemonqueue
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbdaemonqueue.system_user }}
+RuntimeDirectory={{ mbdaemonqueue.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbdaemonqueue.params.testing.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbdaemonqueue.dirs.module }}/{{ mbdaemonqueue.dirs.testing }}/mbdaemonqueue.php --testing
+ExecReload=/bin/kill -s SIGTERM $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
