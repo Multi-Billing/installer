@@ -23,7 +23,7 @@
   register: php
 
 - name: "generate config"
-  command: "{{ php.stdout }} index.php config_mrtg_gen"
+  command: "{{ php.stdout }} mbcron.php config_mrtg_gen"
   args:
     chdir: "{{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}"
   register: config_mrtg_gen
