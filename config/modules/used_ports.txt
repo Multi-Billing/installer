@@ -1,0 +1,8 @@
+mbdaemoncore: 22007, 22008
+mbdaemonbot: 22010,22011
+mbdaemonmessenger: 22020, 22021
+mbdaemonnotify: 22030, 22031
+mbdaemonqueue: 22040, 22041
+mbdaemontv: 22050, 22051
+mbdaemonfinance: 22060, 22061
+mbdaemonfiscalization: 22070, 22071

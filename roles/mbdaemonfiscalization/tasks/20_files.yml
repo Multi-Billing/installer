@@ -1,0 +1,60 @@
+---
+- name: "copy {{ mbdaemonfiscalization.files.archive }}"
+  copy:
+    src: "{{ mbdaemonfiscalization.files.archive }}"
+    dest: "{{ billing.dirs.tmp }}/{{ mbdaemonfiscalization.files.archive }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "unpack {{ mbdaemonfiscalization.files.archive }}"
+  unarchive:
+    src: "{{ billing.dirs.tmp }}/{{ mbdaemonfiscalization.files.archive }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ item }}"
+  with_items:
+    - "{{ mbdaemonfiscalization.dirs.production }}"
+    - "{{ mbdaemonfiscalization.dirs.testing }}"
+
+- name: "copy {{ mbdaemonfiscalization.files.config }} files"
+  copy:
+    src: "{{ mbdaemonfiscalization.files.config }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ item }}/{{ mbdaemonfiscalization.dirs.config }}/{{ mbdaemonfiscalization.files.config }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  with_items:
+    - "{{ mbdaemonfiscalization.dirs.production }}"
+    - "{{ mbdaemonfiscalization.dirs.testing }}"
+
+- name: "create log files"
+  file:
+    path: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfiscalization.dirs.module }}/{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: u=rw,g=rw,o=rw
+  with_items:
+    - "{{ mbdaemonfiscalization.files.log_main }}"
+    - "{{ mbdaemonfiscalization.files.log_debug }}"
+    - "{{ mbdaemonfiscalization.files.log_update }}"
+
+- name: "add updater"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ item.path }}/{{ mbdaemonfiscalization.dirs.updates }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - { src: "update_production.sh", dest: "{{ mbdaemonfiscalization.files.updates }}", path: "{{ mbdaemonfiscalization.dirs.production }}" }
+    - { src: "update_testing.sh", dest: "{{ mbdaemonfiscalization.files.testing }}", path: "{{ mbdaemonfiscalization.dirs.testing }}" }
+
+- name: "add event scripts"
+  copy:
+    src: "event_scripts/{{ item }}.sh"
+    dest: "{{ billing.dirs.home }}/{{ billing.dirs.files }}/{{ billing.dirs.scripts }}/{{ mbdaemonfiscalization.dirs.module }}/{{ item }}.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  with_items:
+    - "{{ mbdaemonfiscalization.files.event_scripts }}"

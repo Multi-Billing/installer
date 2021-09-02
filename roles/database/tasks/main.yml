@@ -16,6 +16,7 @@
     - "mbdaemonmessenger"
     - "mbdaemontv"
     - "mbdaemonbot"
+    - "mbdaemonfiscalization"
 
 - include_tasks: 10_create_files_and_folders.yml
 

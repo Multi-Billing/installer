@@ -45,4 +45,7 @@
 
     - include_tasks: mbdaemonbot.yml
       when: mbdaemonbot is defined
+
+    - include_tasks: mbdaemonfiscalization.yml
+      when: mbdaemonfiscalization is defined
   when: full_install is not defined

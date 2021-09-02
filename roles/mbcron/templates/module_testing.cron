@@ -22,3 +22,6 @@
 # monthly write-offs
 #59 23 28-31 * * {{ OS.fpm.config.pool.user }} [ "$(date +%d -d tomorrow)" = "01" ] && {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/scripts/lastday.sh
 #01 0 1 * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.testing }}/scripts/mth.sh
+
+# update
+05 6 * * * root {{ billing.dirs.home }}/{{ mbcron.dirs.module }}/{{ mbcron.dirs.production }}/{{ mbcron.dirs.updates }}/{{ mbcron.files.updates }}

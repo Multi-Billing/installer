@@ -10,5 +10,5 @@
 # *  *  *  *  * user-name  command to be executed
 
 # update
-05 6 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/{{ mbadmin.dirs.updates }}/{{ mbadmin.files.update_backend }}
-05 6 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/{{ mbadmin.dirs.updates }}/{{ mbadmin.files.update_frontend }}
+05 6 * * * root {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/{{ mbadmin.dirs.updates }}/{{ mbadmin.files.update_backend }}
+05 6 * * * root {{ billing.dirs.home }}/{{ mbadmin.dirs.module }}/{{ mbadmin.dirs.production }}/{{ mbadmin.dirs.updates }}/{{ mbadmin.files.update_frontend }}

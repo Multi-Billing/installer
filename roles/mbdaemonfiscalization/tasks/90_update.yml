@@ -1,0 +1,12 @@
+---
+- name: "update {{ mbdaemonfiscalization.dirs.module }} {{ mbdaemonfiscalization.dirs.production }}"
+  command: "/bin/bash {{ mbdaemonfiscalization.files.updates }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.dirs.production }}/{{ mbdaemonfiscalization.dirs.updates }}"
+  ignore_errors: yes
+
+- name: "update {{ mbdaemonfiscalization.dirs.module }} {{ mbdaemonfiscalization.dirs.testing }}"
+  command: "/bin/bash {{ mbdaemonfiscalization.files.testing }}"
+  args:
+    chdir: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.dirs.testing }}/{{ mbdaemonfiscalization.dirs.updates }}"
+  ignore_errors: yes

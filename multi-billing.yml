@@ -23,10 +23,11 @@
         - "mbcabinet"
         - "mbcabapi"
         - "mbdaemonqueue"
+        - "mbdaemonnotify"
         - "mbdaemonfinance"
         - "mbdaemonmessenger"
         - "mbdaemontv"
-        - "mbdaemonbot"
+        - "mbdaemonfiscalization"
 
     - name: "read OS config"
       include_vars: "config/os/{{ ansible_os_family | lower }}_{{ ansible_distribution_major_version }}.yaml"
@@ -74,4 +75,9 @@
     - mbcron
     - mbhookpaygw
     - mbcabinet
+    - mbdaemonmessenger
+    - mbdaemontv
+    - mbdaemonqueue
+    - mbdaemonnotify
+    - mbdaemonfiscalization
     - final

@@ -15,11 +15,11 @@ mbdaemonfinance:
   params:
     production:
       ip: "127.0.0.1"
-      port: "22010"
+      port: "22060"
       pid: "/var/run/mbdaemonfinance/mbdaemonfinance_production.pid"
     testing:
       ip: "127.0.0.1"
-      port: "22011"
+      port: "22061"
       pid: "/var/run/mbdaemonfinance/mbdaemonfinance_testing.pid"
   dirs:
     module: "mbdaemonfinance"

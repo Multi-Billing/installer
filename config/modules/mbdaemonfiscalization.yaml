@@ -1,0 +1,43 @@
+mbdaemonfiscalization:
+  system_user: "mbdaemonfiscalization"
+  software:
+    database:
+      mysql_user: "mbdaemonfiscalization"
+      mysql_role: "role_mbdaemonfiscalization"
+      # Пароль пользователя
+      # если пароль указан, то он будет использоваться при попытке подключения к базе (пользователь должен быть создан заранее)
+      # если значение пустое, пароль будет сгенерирован (если база данных на одном сервере с модулем)
+      mysql_pass: ""
+      # адрес с которого будет подключаться модуль к MySQL серверу
+      client_ip: "127.0.0.1"
+      # взять IP адрес из переменной ansible_default_ipv4, в таком слчаи client_ip будет проигнорирован
+      use_ansible_default_ipv4: true
+  params:
+    production:
+      ip: "127.0.0.1"
+      port: "22070"
+      pid: "/var/run/mbdaemonfiscalization/mbdaemonfiscalization_production.pid"
+    testing:
+      ip: "127.0.0.1"
+      port: "22071"
+      pid: "/var/run/mbdaemonfiscalization/mbdaemonfiscalization_testing.pid"
+  dirs:
+    module: "mbdaemonfiscalization"
+    config: "config"
+    production: "production"
+    testing: "testing"
+    updates: "updates"
+  files:
+    event_scripts: [ "mb_event_payment" ]
+    systemd_production_service: "mbdaemonfiscalization.service"
+    systemd_testing_service: "mbdaemonfiscalization_testing.service"
+    archive: "mbdaemonfiscalization.tar.gz"
+    updates: "mbdaemonfiscalization_update.sh"
+    testing: "mbdaemonfiscalization_testing.sh"
+    config: "config.xml"
+    log_main: "general.log"
+    log_debug: "debug.log"
+    log_update: "update.log"
+  requirements:
+    ram: 512
+    cores: 1

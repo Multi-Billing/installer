@@ -1,0 +1,20 @@
+[Unit]
+Description=Multi-billing testing mbdaemonfiscalization
+After=syslog.target network.target mysql.service
+
+[Service]
+User={{ mbdaemonfiscalization.system_user }}
+RuntimeDirectory={{ mbdaemonfiscalization.system_user }}
+Type=forking
+TimeoutSec=15s
+PIDFile={{ mbdaemonfiscalization.params.testing.pid }}
+ExecStart={{ php_path.stdout }} {{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.dirs.testing }}/mbdaemonfiscalization.php --testing
+ExecReload=/bin/kill -s SIGTERM $MAINPID
+ExecStop=/bin/kill -s SIGTERM $MAINPID
+KillMode=process
+
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

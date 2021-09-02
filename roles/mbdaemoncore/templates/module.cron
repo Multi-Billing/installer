@@ -13,4 +13,4 @@
 0 * * * *  root /usr/bin/chronyc -a 'burst 4/4' > /dev/null 2>&1
 
 # update
-05 6 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.dirs.production }}/{{ mbdaemoncore.dirs.updates }}/mbdaemoncore_update.sh
+05 6 * * * root {{ billing.dirs.home }}/{{ mbdaemoncore.dirs.module }}/{{ mbdaemoncore.dirs.production }}/{{ mbdaemoncore.dirs.updates }}/mbdaemoncore_update.sh

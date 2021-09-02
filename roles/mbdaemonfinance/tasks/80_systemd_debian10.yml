@@ -11,7 +11,7 @@
         dest: "{{ OS.systemd }}/{{ mbdaemonfinance.files.systemd_production_service }}"
         owner: root
         group: root
-        mode: 0755
+        mode: 0644
 
     - name: "create systemd {{ mbdaemonfinance.files.systemd_testing_service }}"
       template:
@@ -19,17 +19,18 @@
         dest: "{{ OS.systemd }}/{{ mbdaemonfinance.files.systemd_testing_service }}"
         owner: root
         group: root
-        mode: 0755
+        mode: 0644
 
     - name: "reload systemd"
       command: systemctl daemon-reload
-#    - name: "add {{ mbdaemonfinance.files.systemd_production_service }} to startup"
-#      service:
-#        name: "{{ mbdaemonfinance.files.systemd_production_service }}"
-#        enabled: yes
-#
-#    - name: "run {{ mbdaemonfinance.files.systemd_production_service }}"
-#     service:
-#        name: "{{ mbdaemonfinance.files.systemd_production_service }}"
-#        state: started
+
+    - name: "add {{ mbdaemonfinance.files.systemd_production_service }} to startup"
+      service:
+        name: "{{ mbdaemonfinance.files.systemd_production_service }}"
+        enabled: yes
+
+    - name: "run {{ mbdaemonfinance.files.systemd_production_service }}"
+     service:
+        name: "{{ mbdaemonfinance.files.systemd_production_service }}"
+        state: started
   when: php_path.stdout != ""

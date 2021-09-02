@@ -1,0 +1,48 @@
+---
+- name: "replace {{ mbdaemonfiscalization.dirs.production }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.dirs.production }}/{{ mbdaemonfiscalization.dirs.config }}/{{ mbdaemonfiscalization.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonfiscalization.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.database }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonfiscalization_pid}', value: "{{ mbdaemonfiscalization.params.production.pid }}" }
+    - { name: '{mbdaemonfiscalization_ip}', value: "{{ mbdaemonfiscalization.params.production.ip }}" }
+    - { name: '{mbdaemonfiscalization_port}', value: "{{ mbdaemonfiscalization.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.dirs.production }}/{{ mbdaemonfiscalization.dirs.config }}/{{ mbdaemonfiscalization.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonfiscalization.software.database.mysql_pass }}"
+  when: mbdaemonfiscalization.software.database.mysql_pass != ""
+  no_log: true
+
+- name: "replace {{ mbdaemonfiscalization.dirs.testing }} cofig values"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.dirs.testing }}/{{ mbdaemonfiscalization.dirs.config }}/{{ mbdaemonfiscalization.files.config }}"
+    regexp: "{{ item.name }}"
+    replace: "{{ item.value }}"
+  with_items:
+    - { name: '{server_host}', value: "{{ billing.mysql_server }}" }
+    - { name: '{username}', value: "{{ mbdaemonfiscalization.software.database.mysql_user }}" }
+    - { name: '{database}', value: "{{ mysql.testing }}" }
+    - { name: '{log_general}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.files.log_main }}" }
+    - { name: '{log_debug}', value: "{{ billing.dirs.home }}/{{ billing.dirs.logs }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.files.log_debug }}" }
+    - { name: '{timezone}', value: "{{ timezone.stdout }}" }
+    - { name: '{mbdaemonfiscalization_pid}', value: "{{ mbdaemonfiscalization.params.testing.pid }}" }
+    - { name: '{mbdaemonfiscalization_ip}', value: "{{ mbdaemonfiscalization.params.production.ip }}" }
+    - { name: '{mbdaemonfiscalization_port}', value: "{{ mbdaemonfiscalization.params.production.port }}" }
+
+- name: "replace mysql password"
+  replace:
+    path: "{{ billing.dirs.home }}/{{ mbdaemonfiscalization.dirs.module }}/{{ mbdaemonfiscalization.dirs.testing }}/{{ mbdaemonfiscalization.dirs.config }}/{{ mbdaemonfiscalization.files.config }}"
+    regexp: "{password}"
+    replace: "{{ mbdaemonfiscalization.software.database.mysql_pass }}"
+  when: mbdaemonfiscalization.software.database.mysql_pass != ""
+  no_log: true

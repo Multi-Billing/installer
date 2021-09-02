@@ -9,8 +9,5 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
 
-# sync time
-0 * * * *  root /usr/bin/chronyc -a 'burst 4/4' > /dev/null 2>&1
-
 # update
-05 6 * * * {{ OS.fpm.config.pool.user }} {{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.dirs.production }}/{{ mbdaemonfinance.dirs.updates }}/mbdaemonfinance_update.sh
+05 6 * * * root {{ billing.dirs.home }}/{{ mbdaemonfinance.dirs.module }}/{{ mbdaemonfinance.dirs.production }}/{{ mbdaemonfinance.dirs.updates }}/mbdaemonfinance_update.sh

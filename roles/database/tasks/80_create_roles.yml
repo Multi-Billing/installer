@@ -18,3 +18,4 @@
     - "{{ mbdaemonbot.software.database.mysql_role }}"
     - "{{ mbdaemonfinance.software.database.mysql_role }}"
     - "{{ mbdaemonmessenger.software.database.mysql_role }}"
+    - "{{ mbdaemonfiscalization.software.database.mysql_role }}"
