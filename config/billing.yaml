@@ -17,7 +17,7 @@ billing:
   update_server: "update.multi-billing.pro"
   testing_server: "current.multi-billing.pro"
   # какие программы добавлять в chroot среду модулей
-  chroot_programs: ["sh", "bash", "echo", "date", "ls", "awk", "sed", "grep", "cat", "rm", "command"]
+  chroot_programs: [ "sh", "bash", "echo", "date", "ls", "awk", "sed", "grep", "cat", "rm" ]
   disabled_functions: "shell_exec,proc_terminate,pcntl_exec,passthru,proc_nice,dl,show_source,apache_note,apache_setenv,debugger_off,debugger_on,closelog,define_syslog_variables,ini_restore,openlog,syslog,posix_mkfifo,posix_getpwuid,posix_setpgid,posix_uname,posix_setgid,posix_setuid,posix_setegid,posix_getpwuid,posix_setpgid,mail,apache_child_terminate,chgrp,chown,curl_multi_exec,define_syslog_variables,highlight_file,parse_ini_string,stream_select,imap_open,xmlrpc_entity_decode,inject_code,ini_alter,xmlrpc_encode,xmlrpc_decode,xmlrpc_get_type,xmlrpc_is_fault,xmlrpc_set_type,phpAds_remoteInfo,phpAds_XmlRpc,phpAds_xmlrpcDecode,phpAds_xmlrpcEncode,ftp_exec,ftp_get,ftp_nb_fput,ftp_raw,ftp_rawlist,symlink,assert,create_function,phpinfo,posix_ttyname,getenv,posix_getlogin,get_current_user,get_cfg_var,diskfreespace,getlastmo,getmygid,getmyinode,getmyuid,extract,putenv,pfsockopen,base64_decode,parse_ini_file,call_user_func_array,call_user_func"
   # данные директории не трогать!
   dirs:
