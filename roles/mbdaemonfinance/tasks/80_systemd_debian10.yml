@@ -3,12 +3,42 @@
   command: which php
   register: php_path
 
+- name: "check OS systemd path"
+  stat:
+    path: "{{ OS.systemd }}"
+  register: systemd_os_path
+
+- name: "autodetect systemd path in /usr/lib"
+  stat:
+    path: "/usr/lib/systemd/system"
+  register: systemd_auto_path_usr
+
+- name: "autodetect systemd path in /lib"
+  stat:
+    path: "/lib/systemd/system"
+  register: systemd_auto_path_lib
+
+- name: "register systemd OS path"
+  set_fact:
+    systemd_path="{{ systemd_os_path.stat.path }}"
+  when: systemd_os_path.stat.exists == true
+
+- name: "register systemd OS path"
+  set_fact:
+    systemd_path="{{ systemd_auto_path_usr.stat.path }}"
+  when: systemd_auto_path_usr.stat.exists == true
+
+- name: "register systemd OS path"
+  set_fact:
+    systemd_path="{{ systemd_auto_path_lib.stat.path }}"
+  when: systemd_auto_path_lib.stat.exists == true
+
 - name: "systemd"
   block:
     - name: "create systemd {{ mbdaemonfinance.files.systemd_production_service }}"
       template:
         src: "{{ mbdaemonfinance.files.systemd_production_service }}"
-        dest: "{{ OS.systemd }}/{{ mbdaemonfinance.files.systemd_production_service }}"
+        dest: "{{ systemd_path }}/{{ mbdaemonfinance.files.systemd_production_service }}"
         owner: root
         group: root
         mode: 0644
@@ -16,7 +46,7 @@
     - name: "create systemd {{ mbdaemonfinance.files.systemd_testing_service }}"
       template:
         src: "{{ mbdaemonfinance.files.systemd_testing_service }}"
-        dest: "{{ OS.systemd }}/{{ mbdaemonfinance.files.systemd_testing_service }}"
+        dest: "{{ systemd_path }}/{{ mbdaemonfinance.files.systemd_testing_service }}"
         owner: root
         group: root
         mode: 0644
